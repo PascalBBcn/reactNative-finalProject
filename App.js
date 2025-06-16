@@ -2,11 +2,16 @@ import { StatusBar } from "expo-status-bar";
 import {
   ScrollView,
   StyleSheet,
+  SafeAreaView,
   Text,
   View,
   Image,
   Dimensions,
   TouchableOpacity,
+  Switch,
+  ActivityIndicator,
+  AccessibilityInfo,
+  TextInput,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -52,16 +57,124 @@ const HomeScreenCell = (props) => (
 );
 
 function Settings({ navigation }) {
-  return <View></View>;
+  return (
+    <SafeAreaView>
+      <ScrollView>
+        <TableView>
+          <Section
+            header="Support"
+            headerTextStyle={{
+              fontWeight: "bold",
+              color: "black",
+            }}
+          >
+            <Cell
+              title="Contact us"
+              cellStyle="Basic"
+              accessory="DisclosureIndicator"
+              accessoryColorDisclosureIndicator={"darkgray"}
+              contentContainerStyle={{ paddingRight: screenWidth / 9 }}
+              onPress={() => alert("test!")}
+            />
+            <Cell
+              title="Feedback"
+              cellStyle="Basic"
+              accessory="DisclosureIndicator"
+              accessoryColorDisclosureIndicator={"darkgray"}
+              contentContainerStyle={{ paddingRight: screenWidth / 9 }}
+              onPress={() => alert("test!")}
+            />
+          </Section>
+          <Section
+            header="Account"
+            headerTextStyle={{
+              fontWeight: "bold",
+              color: "black",
+            }}
+          >
+            <Cell
+              title="Log out"
+              onPress={() => alert("Are you sure you want to log out?")}
+            />
+            <Cell
+              title="Delete account"
+              onPress={() =>
+                alert("Are you sure you want to DELETE your account?")
+              }
+            />
+          </Section>
+          <Section
+            header="About"
+            headerTextStyle={{
+              fontWeight: "bold",
+              color: "black",
+            }}
+          >
+            <Cell
+              title="Privacy policy"
+              cellStyle="Basic"
+              accessory="DisclosureIndicator"
+              accessoryColorDisclosureIndicator={"darkgray"}
+              contentContainerStyle={{ paddingRight: screenWidth / 9 }}
+              onPress={() => alert("test!")}
+            />
+          </Section>
+          <Section
+            header="App"
+            headerTextStyle={{
+              fontWeight: "bold",
+              color: "black",
+            }}
+          >
+            <Cell
+              cellStyle="Basic"
+              title="Light mode"
+              cellAccessoryView={<Switch />}
+              contentContainerStyle={{
+                paddingVertical: 4,
+                paddingRight: screenWidth / 20,
+              }}
+            />
+            <Cell
+              cellStyle="Basic"
+              title="Dark mode"
+              cellAccessoryView={<Switch />}
+              contentContainerStyle={{ paddingVertical: 4 }}
+            />
+            <Cell
+              title="Font size"
+              cellStyle="Basic"
+              accessory="DisclosureIndicator"
+              accessoryColorDisclosureIndicator={"darkgray"}
+              contentContainerStyle={{ paddingRight: screenWidth / 9 }}
+              onPress={() => alert("test!")}
+            />
+          </Section>
+        </TableView>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 function Saved({ navigation }) {
-  return <View></View>;
+  return (
+    <SafeAreaView>
+      <View></View>
+    </SafeAreaView>
+  );
 }
 function ShoppingList({ navigation }) {
-  return <View></View>;
+  return (
+    <SafeAreaView>
+      <View></View>
+    </SafeAreaView>
+  );
 }
 function Search({ navigation }) {
-  return <View></View>;
+  return (
+    <SafeAreaView>
+      <View></View>
+    </SafeAreaView>
+  );
 }
 const repeatedScreenOptions = ({ navigation }) => ({
   headerTitleAlign: "center",
@@ -76,103 +189,105 @@ const repeatedScreenOptions = ({ navigation }) => ({
 });
 function Homescreen({ navigation }) {
   return (
-    <ScrollView>
-      <TableView>
-        <Section header="" hideSeparator="true" separatorTintColor="#ccc">
-          <HomeScreenCell
-            title="Creamery Ice Cream Parlour"
-            tagline="Desert, Ice cream, Cookies, £"
-            eta="10-30"
-            score="4.1"
-            imgUri={require("./assets/iceCream.jpg")}
-            action={() =>
-              navigation.navigate("Menu", {
-                items: [
-                  {
-                    title: "Gelato",
-                    contents: [
-                      { title: "Vanilla" },
-                      { title: "Pistachio 🔥" },
-                      { title: "Chocolate" },
-                    ],
-                  },
-                  {
-                    title: "Cookies",
-                    contents: [
-                      { title: "Chocolate Chip" },
-                      { title: "Macadamia White Chocolate" },
-                      { title: "Peanut Butter" },
-                      { title: "Shortbread" },
-                    ],
-                  },
-                ],
-              })
-            }
-          />
-          <HomeScreenCell
-            title="Cheezza Pizza"
-            tagline="Pizza, Cheese, Garlic bread, ££"
-            eta="35+"
-            score="4.3"
-            isPopular="true"
-            imgUri={require("./assets/pizza.jpg")}
-            action={() =>
-              navigation.navigate("Menu", {
-                items: [
-                  {
-                    title: "Cheezas",
-                    contents: [
-                      { title: "Cheeze" },
-                      { title: "Extra Cheeze" },
-                      { title: "Cheeza Supreme 🔥" },
-                    ],
-                  },
-                  {
-                    title: "Garlic Bread",
-                    contents: [
-                      { title: "Garlic" },
-                      { title: "Garlic Cheeze" },
-                      { title: "Garlic Extra Cheeze" },
-                      { title: "Garlic Cheeza Supreme" },
-                    ],
-                  },
-                ],
-              })
-            }
-          />
-          <HomeScreenCell
-            title="Butter Curry Chicken Story"
-            tagline="Butter chicken, Naan, Samosa, £££"
-            eta="20-35"
-            score="4.5"
-            imgUri={require("./assets/curry.jpg")}
-            action={() =>
-              navigation.navigate("Menu", {
-                items: [
-                  {
-                    title: "Main Dishes",
-                    contents: [
-                      { title: "Butter Chicken 🔥" },
-                      { title: "Dal Makhani" },
-                      { title: "Palak Paneer" },
-                      { title: "Chicken Biryani" },
-                    ],
-                  },
-                  {
-                    title: "Samosas",
-                    contents: [
-                      { title: "Chicken" },
-                      { title: "Veggie" },
-                      { title: "Lamb" },
-                    ],
-                  },
-                ],
-              })
-            }
-          />
-        </Section>
-      </TableView>
-    </ScrollView>
+    <SafeAreaView>
+      <ScrollView>
+        <TableView>
+          <Section header="" hideSeparator="true" separatorTintColor="#ccc">
+            <HomeScreenCell
+              title="Creamery Ice Cream Parlour"
+              tagline="Desert, Ice cream, Cookies, £"
+              eta="10-30"
+              score="4.1"
+              imgUri={require("./assets/iceCream.jpg")}
+              action={() =>
+                navigation.navigate("Menu", {
+                  items: [
+                    {
+                      title: "Gelato",
+                      contents: [
+                        { title: "Vanilla" },
+                        { title: "Pistachio 🔥" },
+                        { title: "Chocolate" },
+                      ],
+                    },
+                    {
+                      title: "Cookies",
+                      contents: [
+                        { title: "Chocolate Chip" },
+                        { title: "Macadamia White Chocolate" },
+                        { title: "Peanut Butter" },
+                        { title: "Shortbread" },
+                      ],
+                    },
+                  ],
+                })
+              }
+            />
+            <HomeScreenCell
+              title="Cheezza Pizza"
+              tagline="Pizza, Cheese, Garlic bread, ££"
+              eta="35+"
+              score="4.3"
+              isPopular="true"
+              imgUri={require("./assets/pizza.jpg")}
+              action={() =>
+                navigation.navigate("Menu", {
+                  items: [
+                    {
+                      title: "Cheezas",
+                      contents: [
+                        { title: "Cheeze" },
+                        { title: "Extra Cheeze" },
+                        { title: "Cheeza Supreme 🔥" },
+                      ],
+                    },
+                    {
+                      title: "Garlic Bread",
+                      contents: [
+                        { title: "Garlic" },
+                        { title: "Garlic Cheeze" },
+                        { title: "Garlic Extra Cheeze" },
+                        { title: "Garlic Cheeza Supreme" },
+                      ],
+                    },
+                  ],
+                })
+              }
+            />
+            <HomeScreenCell
+              title="Butter Curry Chicken Story"
+              tagline="Butter chicken, Naan, Samosa, £££"
+              eta="20-35"
+              score="4.5"
+              imgUri={require("./assets/curry.jpg")}
+              action={() =>
+                navigation.navigate("Menu", {
+                  items: [
+                    {
+                      title: "Main Dishes",
+                      contents: [
+                        { title: "Butter Chicken 🔥" },
+                        { title: "Dal Makhani" },
+                        { title: "Palak Paneer" },
+                        { title: "Chicken Biryani" },
+                      ],
+                    },
+                    {
+                      title: "Samosas",
+                      contents: [
+                        { title: "Chicken" },
+                        { title: "Veggie" },
+                        { title: "Lamb" },
+                      ],
+                    },
+                  ],
+                })
+              }
+            />
+          </Section>
+        </TableView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 function Menu({ route, navigation }) {
@@ -197,76 +312,78 @@ function Menu({ route, navigation }) {
   };
 
   return (
-    <ScrollView>
-      <TableView>
-        {route.params.items.map((section, i) => (
-          <Section
-            key={i}
-            header={section.title}
-            headerTextStyle={{
-              fontSize: 20,
-              fontWeight: "bold",
-              color: "black",
-              fontStyle: "italic",
-              letterSpacing: 0.6,
-            }}
-          >
-            {section.contents.map((cell, i) => (
-              <Cell key={i} title={cell.title}>
-                <View
-                  style={{
-                    position: "absolute",
-                    right: imageHeight / 10,
-                    alignItems: "center",
-                    flexDirection: "row",
-                    height: "100%",
-                  }}
-                >
-                  <TouchableOpacity
-                    onPress={() => updateValue(cell.title, -1)}
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView>
+        <TableView>
+          {route.params.items.map((section, i) => (
+            <Section
+              key={i}
+              header={section.title}
+              headerTextStyle={{
+                fontSize: 20,
+                fontWeight: "bold",
+                color: "black",
+                fontStyle: "italic",
+                letterSpacing: 0.6,
+              }}
+            >
+              {section.contents.map((cell, i) => (
+                <Cell key={i} title={cell.title}>
+                  <View
                     style={{
-                      padding: 10,
-                      backgroundColor: "black",
-                      opacity: 0.8,
-                      borderRadius: 100,
+                      position: "absolute",
+                      right: imageHeight / 10,
+                      alignItems: "center",
+                      flexDirection: "row",
+                      height: "100%",
                     }}
                   >
-                    <Text
+                    <TouchableOpacity
+                      onPress={() => updateValue(cell.title, -1)}
                       style={{
-                        color: "lightgreen",
-                        fontWeight: "bold",
+                        padding: 10,
+                        backgroundColor: "black",
+                        opacity: 0.8,
+                        borderRadius: 100,
                       }}
                     >
-                      -
+                      <Text
+                        style={{
+                          color: "lightgreen",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        -
+                      </Text>
+                    </TouchableOpacity>
+                    <Text
+                      style={{
+                        marginHorizontal: 10,
+                        minWidth: 20,
+                        textAlign: "center",
+                        fontSize: 20,
+                      }}
+                    >
+                      {quantities[cell.title] || 0}
                     </Text>
-                  </TouchableOpacity>
-                  <Text
-                    style={{
-                      marginHorizontal: 10,
-                      minWidth: 20,
-                      textAlign: "center",
-                      fontSize: 20,
-                    }}
-                  >
-                    {quantities[cell.title] || 0}
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => updateValue(cell.title, 1)}
-                    style={{
-                      padding: 10,
-                      backgroundColor: "lightgreen",
-                      borderRadius: 100,
-                    }}
-                  >
-                    <Text style={{ fontWeight: "bold" }}>+</Text>
-                  </TouchableOpacity>
-                </View>
-              </Cell>
-            ))}
-          </Section>
-        ))}
-      </TableView>
-    </ScrollView>
+                    <TouchableOpacity
+                      onPress={() => updateValue(cell.title, 1)}
+                      style={{
+                        padding: 10,
+                        backgroundColor: "lightgreen",
+                        borderRadius: 100,
+                      }}
+                    >
+                      <Text style={{ fontWeight: "bold" }}>+</Text>
+                    </TouchableOpacity>
+                  </View>
+                </Cell>
+              ))}
+            </Section>
+          ))}
+        </TableView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -276,7 +393,6 @@ function HomeStack() {
     <Stack.Navigator screenOptions={repeatedScreenOptions}>
       <Stack.Screen name="GetRecipes" component={Homescreen} />
       <Stack.Screen name="Menu" component={Menu} />
-      {/* <Stack.Screen name="Settings" component={Settings} /> */}
     </Stack.Navigator>
   );
 }
@@ -289,7 +405,6 @@ function SavedStack() {
         component={Saved}
         options={{ title: "Saved" }}
       />
-      {/* <Stack.Screen name="Settings" component={Settings} /> */}
     </Stack.Navigator>
   );
 }
@@ -302,7 +417,6 @@ function ShoppingListStack() {
         component={ShoppingList}
         options={{ title: "Shopping List" }}
       />
-      {/* <Stack.Screen name="Settings" component={Settings} /> */}
     </Stack.Navigator>
   );
 }
@@ -315,7 +429,6 @@ function SearchStack() {
         component={Search}
         options={{ title: "Search" }}
       />
-      {/* <Stack.Screen name="Settings" component={Settings} /> */}
     </Stack.Navigator>
   );
 }
@@ -364,7 +477,13 @@ export default function App() {
           component={Tabs}
           options={{ headerShown: false }}
         />
-        <MainStack.Screen name="Settings" component={Settings} />
+        <MainStack.Screen
+          name="Settings"
+          component={Settings}
+          options={{
+            headerTitleAlign: "center",
+          }}
+        />
       </MainStack.Navigator>
     </NavigationContainer>
   );
