@@ -276,7 +276,7 @@ function HomeStack() {
     <Stack.Navigator screenOptions={repeatedScreenOptions}>
       <Stack.Screen name="GetRecipes" component={Homescreen} />
       <Stack.Screen name="Menu" component={Menu} />
-      <Stack.Screen name="Settings" component={Settings} />
+      {/* <Stack.Screen name="Settings" component={Settings} /> */}
     </Stack.Navigator>
   );
 }
@@ -289,7 +289,7 @@ function SavedStack() {
         component={Saved}
         options={{ title: "Saved" }}
       />
-      <Stack.Screen name="Settings" component={Settings} />
+      {/* <Stack.Screen name="Settings" component={Settings} /> */}
     </Stack.Navigator>
   );
 }
@@ -302,7 +302,7 @@ function ShoppingListStack() {
         component={ShoppingList}
         options={{ title: "Shopping List" }}
       />
-      <Stack.Screen name="Settings" component={Settings} />
+      {/* <Stack.Screen name="Settings" component={Settings} /> */}
     </Stack.Navigator>
   );
 }
@@ -315,42 +315,57 @@ function SearchStack() {
         component={Search}
         options={{ title: "Search" }}
       />
-      <Stack.Screen name="Settings" component={Settings} />
+      {/* <Stack.Screen name="Settings" component={Settings} /> */}
     </Stack.Navigator>
   );
 }
 
 const Tab = createBottomTabNavigator();
+
+function Tabs() {
+  return (
+    <Tab.Navigator
+      initialRouteName={"Home"}
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === "Saved") {
+            iconName = focused ? "heart" : "heart-outline";
+          } else if (route.name === "Shopping List") {
+            iconName = focused ? "list" : "list-outline";
+          } else if (route.name === "Home") {
+            iconName = focused ? "home" : "home-outline";
+          } else if (route.name === "Search") {
+            iconName = focused ? "search" : "search-outline";
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        headerShown: false,
+        tabBarInactiveTintColor: "gray",
+        tabBarActiveTintColor: "#C34946",
+        tabBarLabelStyle: { fontSize: 11, fontWeight: "bold" },
+      })}
+    >
+      <Tab.Screen name="Saved" component={SavedStack} />
+      <Tab.Screen name="Shopping List" component={ShoppingListStack} />
+      <Tab.Screen name="Home" component={HomeStack} />
+      <Tab.Screen name="Search" component={SearchStack} />
+    </Tab.Navigator>
+  );
+}
+const MainStack = createNativeStackNavigator();
+
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        initialRouteName={"Home"}
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-            if (route.name === "Saved") {
-              iconName = focused ? "heart" : "heart-outline";
-            } else if (route.name === "Shopping List") {
-              iconName = focused ? "list" : "list-outline";
-            } else if (route.name === "Home") {
-              iconName = focused ? "home" : "home-outline";
-            } else if (route.name === "Search") {
-              iconName = focused ? "search" : "search-outline";
-            }
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          headerShown: false,
-          tabBarInactiveTintColor: "gray",
-          tabBarActiveTintColor: "#C34946",
-          tabBarLabelStyle: { fontSize: 11, fontWeight: "bold" },
-        })}
-      >
-        <Tab.Screen name="Saved" component={SavedStack} />
-        <Tab.Screen name="Shopping List" component={ShoppingListStack} />
-        <Tab.Screen name="Home" component={HomeStack} />
-        <Tab.Screen name="Search" component={SearchStack} />
-      </Tab.Navigator>
+      <MainStack.Navigator>
+        <MainStack.Screen
+          name="Main"
+          component={Tabs}
+          options={{ headerShown: false }}
+        />
+        <MainStack.Screen name="Settings" component={Settings} />
+      </MainStack.Navigator>
     </NavigationContainer>
   );
 }
