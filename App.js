@@ -9,9 +9,8 @@ import {
   Dimensions,
   TouchableOpacity,
   Switch,
-  ActivityIndicator,
-  AccessibilityInfo,
   TextInput,
+  FlatList,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -26,6 +25,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 
 const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
 const imageHeight = Dimensions.get("window").height * 0.25;
 
 const HomeScreenCell = (props) => (
@@ -172,7 +172,18 @@ function ShoppingList({ navigation }) {
 function Search({ navigation }) {
   return (
     <SafeAreaView>
-      <View></View>
+      <ScrollView>
+        <View style={styles.section}>
+          <Text style={styles.header}>What would you like to cook?</Text>
+          <View style={styles.searchBar}>
+            <Ionicons name="search" size={20} color="#656565" />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Ingredients, cuisine, dish, keyword"
+            />
+          </View>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -187,109 +198,181 @@ const repeatedScreenOptions = ({ navigation }) => ({
     </TouchableOpacity>
   ),
 });
+// OG
+// function Homescreen({ navigation }) {
+//   return (
+//     <SafeAreaView>
+//       <ScrollView>
+//         <TableView>
+//           <Section header="" hideSeparator="true" separatorTintColor="#ccc">
+//             <HomeScreenCell
+//               title="Creamery Ice Cream Parlour"
+//               tagline="Desert, Ice cream, Cookies, £"
+//               eta="10-30"
+//               score="4.1"
+//               imgUri={require("./assets/iceCream.jpg")}
+//               action={() =>
+//                 navigation.navigate("Menu", {
+//                   items: [
+//                     {
+//                       title: "Gelato",
+//                       contents: [
+//                         { title: "Vanilla" },
+//                         { title: "Pistachio 🔥" },
+//                         { title: "Chocolate" },
+//                       ],
+//                     },
+//                     {
+//                       title: "Cookies",
+//                       contents: [
+//                         { title: "Chocolate Chip" },
+//                         { title: "Macadamia White Chocolate" },
+//                         { title: "Peanut Butter" },
+//                         { title: "Shortbread" },
+//                       ],
+//                     },
+//                   ],
+//                 })
+//               }
+//             />
+//             <HomeScreenCell
+//               title="Cheezza Pizza"
+//               tagline="Pizza, Cheese, Garlic bread, ££"
+//               eta="35+"
+//               score="4.3"
+//               isPopular="true"
+//               imgUri={require("./assets/pizza.jpg")}
+//               action={() =>
+//                 navigation.navigate("Menu", {
+//                   items: [
+//                     {
+//                       title: "Cheezas",
+//                       contents: [
+//                         { title: "Cheeze" },
+//                         { title: "Extra Cheeze" },
+//                         { title: "Cheeza Supreme 🔥" },
+//                       ],
+//                     },
+//                     {
+//                       title: "Garlic Bread",
+//                       contents: [
+//                         { title: "Garlic" },
+//                         { title: "Garlic Cheeze" },
+//                         { title: "Garlic Extra Cheeze" },
+//                         { title: "Garlic Cheeza Supreme" },
+//                       ],
+//                     },
+//                   ],
+//                 })
+//               }
+//             />
+//             <HomeScreenCell
+//               title="Butter Curry Chicken Story"
+//               tagline="Butter chicken, Naan, Samosa, £££"
+//               eta="20-35"
+//               score="4.5"
+//               imgUri={require("./assets/curry.jpg")}
+//               action={() =>
+//                 navigation.navigate("Menu", {
+//                   items: [
+//                     {
+//                       title: "Main Dishes",
+//                       contents: [
+//                         { title: "Butter Chicken 🔥" },
+//                         { title: "Dal Makhani" },
+//                         { title: "Palak Paneer" },
+//                         { title: "Chicken Biryani" },
+//                       ],
+//                     },
+//                     {
+//                       title: "Samosas",
+//                       contents: [
+//                         { title: "Chicken" },
+//                         { title: "Veggie" },
+//                         { title: "Lamb" },
+//                       ],
+//                     },
+//                   ],
+//                 })
+//               }
+//             />
+//           </Section>
+//         </TableView>
+//       </ScrollView>
+//     </SafeAreaView>
+//   );
+// }
+// EXPERIMENTAL
 function Homescreen({ navigation }) {
+  const hotRecipes = [
+    { id: "1", name: "Recipe Name 1" },
+    { id: "2", name: "Recipe Name 2" },
+    { id: "3", name: "Recipe Name 3" },
+  ];
+
+  const mealTypes = ["Breakfast", "Lunch", "Dinner"];
+  const cuisines = [
+    "Italian",
+    "Japanese",
+    "Indian",
+    "British",
+    "Chinese",
+    "Iranian",
+  ];
+
   return (
     <SafeAreaView>
       <ScrollView>
-        <TableView>
-          <Section header="" hideSeparator="true" separatorTintColor="#ccc">
-            <HomeScreenCell
-              title="Creamery Ice Cream Parlour"
-              tagline="Desert, Ice cream, Cookies, £"
-              eta="10-30"
-              score="4.1"
-              imgUri={require("./assets/iceCream.jpg")}
-              action={() =>
-                navigation.navigate("Menu", {
-                  items: [
-                    {
-                      title: "Gelato",
-                      contents: [
-                        { title: "Vanilla" },
-                        { title: "Pistachio 🔥" },
-                        { title: "Chocolate" },
-                      ],
-                    },
-                    {
-                      title: "Cookies",
-                      contents: [
-                        { title: "Chocolate Chip" },
-                        { title: "Macadamia White Chocolate" },
-                        { title: "Peanut Butter" },
-                        { title: "Shortbread" },
-                      ],
-                    },
-                  ],
-                })
-              }
+        <View style={styles.section}>
+          <Text style={styles.header}>What would you like to cook?</Text>
+          <View style={styles.searchBar}>
+            <Ionicons name="search" size={20} color="#656565" />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Ingredients, cuisine, dish, keyword"
             />
-            <HomeScreenCell
-              title="Cheezza Pizza"
-              tagline="Pizza, Cheese, Garlic bread, ££"
-              eta="35+"
-              score="4.3"
-              isPopular="true"
-              imgUri={require("./assets/pizza.jpg")}
-              action={() =>
-                navigation.navigate("Menu", {
-                  items: [
-                    {
-                      title: "Cheezas",
-                      contents: [
-                        { title: "Cheeze" },
-                        { title: "Extra Cheeze" },
-                        { title: "Cheeza Supreme 🔥" },
-                      ],
-                    },
-                    {
-                      title: "Garlic Bread",
-                      contents: [
-                        { title: "Garlic" },
-                        { title: "Garlic Cheeze" },
-                        { title: "Garlic Extra Cheeze" },
-                        { title: "Garlic Cheeza Supreme" },
-                      ],
-                    },
-                  ],
-                })
-              }
-            />
-            <HomeScreenCell
-              title="Butter Curry Chicken Story"
-              tagline="Butter chicken, Naan, Samosa, £££"
-              eta="20-35"
-              score="4.5"
-              imgUri={require("./assets/curry.jpg")}
-              action={() =>
-                navigation.navigate("Menu", {
-                  items: [
-                    {
-                      title: "Main Dishes",
-                      contents: [
-                        { title: "Butter Chicken 🔥" },
-                        { title: "Dal Makhani" },
-                        { title: "Palak Paneer" },
-                        { title: "Chicken Biryani" },
-                      ],
-                    },
-                    {
-                      title: "Samosas",
-                      contents: [
-                        { title: "Chicken" },
-                        { title: "Veggie" },
-                        { title: "Lamb" },
-                      ],
-                    },
-                  ],
-                })
-              }
-            />
-          </Section>
-        </TableView>
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.headerTwo}>Hot recipes now!</Text>
+          <FlatList
+            data={hotRecipes}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <View style={styles.homescreenCard}>
+                <Text>{item.name}</Text>
+              </View>
+            )}
+          />
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.headerTwo}>Browse by meal</Text>
+          <View style={styles.row}>
+            {mealTypes.map((meal) => (
+              <TouchableOpacity key={meal} style={styles.homescreenButton}>
+                <Text>{meal}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.headerTwo}>Browse by cuisine</Text>
+          <View style={styles.grid}>
+            {cuisines.map((cuisine) => (
+              <TouchableOpacity key={cuisine} style={styles.homescreenButton}>
+                <Text>{cuisine}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
+
 function Menu({ route, navigation }) {
   // So we can add a quantity for each menu item
   const [quantities, setQuantities] = React.useState({});
@@ -578,5 +661,67 @@ const styles = StyleSheet.create({
   tagline: {
     fontSize: 14,
     color: "#888",
+  },
+  // HOMESCREEN
+  section: {
+    marginBottom: screenHeight / 20,
+    marginLeft: screenWidth / 20,
+    marginRight: screenWidth / 20,
+  },
+  header: {
+    marginTop: screenHeight / 25,
+    marginBottom: screenHeight / 40,
+    fontWeight: "bold",
+    fontSize: 20,
+    textAlign: "center",
+    marginVertical: 12,
+  },
+  searchBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#eee",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingLeft: 15,
+    height: 50,
+  },
+  searchInput: {
+    marginLeft: 8,
+    flex: 1,
+  },
+  headerTwo: {
+    fontWeight: "bold",
+    alignSelf: "center",
+    fontSize: 18,
+    marginVertical: 10,
+    marginBottom: screenHeight / 35,
+  },
+  homescreenCard: {
+    width: screenWidth / 3,
+    height: screenHeight / 7,
+    backgroundColor: "#ddd",
+    borderRadius: 10,
+    justifyContent: "flex-end",
+    padding: 8,
+    marginRight: 10,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+  },
+  grid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: 10,
+  },
+  homescreenButton: {
+    backgroundColor: "#ddd",
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    width: 100,
+    alignItems: "center",
   },
 });
