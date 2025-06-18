@@ -26,30 +26,32 @@ import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navi
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
-const imageHeight = Dimensions.get("window").height * 0.25;
+const imageHeight = Dimensions.get("window").height * 0.2;
 
-const HomeScreenCell = (props) => (
+const SearchScreenCell = (props) => (
   <Cell
     {...props}
     cellContentView={
       <View style={styles.cellContent}>
         <Image source={props.imgUri} style={styles.img} />
-        <View style={styles.etaBadge}>
-          <Text style={styles.etaText}>{props.eta} mins</Text>
-        </View>
-        <View style={styles.scoreBadge}>
-          <Text style={styles.scoreText}>{props.score} ⭐</Text>
-        </View>
-        {props.isPopular && (
-          <View style={styles.popularBadge}>
-            <Text style={styles.popularText}>🔥 Popular!</Text>
+        <View style={styles.textContainer}>
+          <Text style={styles.title}>{props.title}</Text>
+          <View style={styles.starContainer}>
+            <Ionicons name="star" size={15} color="black" />
+            <Ionicons name="star" size={15} color="black" />
+            <Ionicons name="star" size={15} color="black" />
           </View>
-        )}
-        <Text style={styles.title}>{props.title}</Text>
-        <Text style={styles.tagline}>{props.tagline}</Text>
+          <View style={styles.timerContainer}>
+            <Ionicons name="timer" size={15} color="#656565" />
+            <Text style={styles.timerText}>{props.eta} mins</Text>
+          </View>
+          <Text style={styles.tagline}>{props.tagline}</Text>
+        </View>
+        <View style={styles.heartContainer}>
+          <Ionicons name="heart-outline" size={22} color="#C34946" />
+        </View>
       </View>
     }
-    height={290}
     backgroundColor="transparent"
     highlightUnderlayColor="#ccc"
     onPress={props.action}
@@ -183,6 +185,101 @@ function Search({ navigation }) {
             />
           </View>
         </View>
+        <TableView>
+          <Section header="" separatorInsetLeft="0" separatorTintColor="black">
+            <SearchScreenCell
+              title="Recipe 1 Recipe 1 Recipe 1"
+              tagline="Desert, Ice cream, Cookies, £"
+              eta="10-30"
+              score="4.1"
+              imgUri={require("./assets/iceCream.jpg")}
+              action={() =>
+                navigation.navigate("Menu", {
+                  items: [
+                    {
+                      title: "Gelato",
+                      contents: [
+                        { title: "Vanilla" },
+                        { title: "Pistachio 🔥" },
+                        { title: "Chocolate" },
+                      ],
+                    },
+                    {
+                      title: "Cookies",
+                      contents: [
+                        { title: "Chocolate Chip" },
+                        { title: "Macadamia White Chocolate" },
+                        { title: "Peanut Butter" },
+                        { title: "Shortbread" },
+                      ],
+                    },
+                  ],
+                })
+              }
+            />
+            <SearchScreenCell
+              title="Recipe 2"
+              tagline="Pizza, Cheese, Garlic bread, ££"
+              eta="35+"
+              score="4.3"
+              isPopular="true"
+              imgUri={require("./assets/pizza.jpg")}
+              action={() =>
+                navigation.navigate("Menu", {
+                  items: [
+                    {
+                      title: "Cheezas",
+                      contents: [
+                        { title: "Cheeze" },
+                        { title: "Extra Cheeze" },
+                        { title: "Cheeza Supreme 🔥" },
+                      ],
+                    },
+                    {
+                      title: "Garlic Bread",
+                      contents: [
+                        { title: "Garlic" },
+                        { title: "Garlic Cheeze" },
+                        { title: "Garlic Extra Cheeze" },
+                        { title: "Garlic Cheeza Supreme" },
+                      ],
+                    },
+                  ],
+                })
+              }
+            />
+            <SearchScreenCell
+              title="Recipe 3"
+              tagline="Butter chicken, Naan, Samosa, £££"
+              eta="20-35"
+              score="4.5"
+              imgUri={require("./assets/curry.jpg")}
+              action={() =>
+                navigation.navigate("Menu", {
+                  items: [
+                    {
+                      title: "Main Dishes",
+                      contents: [
+                        { title: "Butter Chicken 🔥" },
+                        { title: "Dal Makhani" },
+                        { title: "Palak Paneer" },
+                        { title: "Chicken Biryani" },
+                      ],
+                    },
+                    {
+                      title: "Samosas",
+                      contents: [
+                        { title: "Chicken" },
+                        { title: "Veggie" },
+                        { title: "Lamb" },
+                      ],
+                    },
+                  ],
+                })
+              }
+            />
+          </Section>
+        </TableView>
       </ScrollView>
     </SafeAreaView>
   );
@@ -579,8 +676,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  // img: {
+  //   width: "100%",
+  //   height: imageHeight,
+  //   borderRadius: 10,
+  //   elevation: 4,
+  //   shadowColor: "#000",
+  //   shadowOffset: { width: 0, height: 2 },
+  //   shadowOpacity: 0.25,
+  //   shadowRadius: 4.5,
+  // },
+  // cellContent: {
+  //   position: "relative",
+  //   width: screenWidth - 30,
+  //   marginBottom: imageHeight / 10,
+  //   backgroundColor: "rgba(173, 216, 230, 0.2)",
+  //   borderRadius: 15,
+  // },
   img: {
-    width: "100%",
+    width: imageHeight,
     height: imageHeight,
     borderRadius: 10,
     elevation: 4,
@@ -588,85 +702,49 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4.5,
+    alignSelf: "center",
   },
   cellContent: {
-    position: "relative",
-    width: screenWidth - 30,
-    marginBottom: imageHeight / 10,
-    backgroundColor: "rgba(173, 216, 230, 0.2)",
     borderRadius: 15,
+    width: "100%",
+    flexDirection: "row",
+    height: imageHeight * 1.25,
+    paddingRight: screenWidth / 25,
   },
-  etaBadge: {
-    position: "absolute",
-    right: imageHeight / 10,
-    bottom: imageHeight - 165,
-    backgroundColor: "white",
-    borderRadius: 30,
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    elevation: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.25,
-    shadowRadius: 1.5,
+  textContainer: {
+    width: imageHeight / 1.1,
+    borderColor: "black",
+    marginTop: imageHeight / 6,
+    marginLeft: screenWidth / 25,
+    justifyContent: "flex-start",
   },
-  etaText: {
-    fontWeight: "bold",
-    fontSize: 20,
+  starContainer: {
+    flexDirection: "row",
   },
-  scoreBadge: {
-    position: "absolute",
-    right: imageHeight / 20,
-    bottom: imageHeight,
-    backgroundColor: "black",
-    borderRadius: 30,
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    elevation: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
+  timerContainer: {
+    fontSize: 1,
+    flexDirection: "row",
+    alignItems: "center",
   },
-  scoreText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: imageHeight / 15,
-  },
-  popularBadge: {
-    position: "absolute",
-    right: imageHeight + 35,
-    bottom: imageHeight / 3,
-    backgroundColor: "rgba(255, 65, 20, 0.9)",
-    borderRadius: 30,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    elevation: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-  },
-  popularText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: imageHeight / 15,
-    letterSpacing: 0.7,
+  timerText: {
+    fontSize: 10,
   },
   title: {
-    marginTop: 10,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
   },
   tagline: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#888",
+  },
+  heartContainer: {
+    justifyContent: "center",
   },
   // HOMESCREEN
   section: {
     marginBottom: screenHeight / 20,
-    marginLeft: screenWidth / 20,
-    marginRight: screenWidth / 20,
+    marginLeft: screenWidth / 25,
+    marginRight: screenWidth / 25,
   },
   header: {
     marginTop: screenHeight / 25,
