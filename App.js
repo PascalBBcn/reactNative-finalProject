@@ -20,9 +20,10 @@ import {
   Separator,
   TableView,
 } from "react-native-tableview-simple";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
+import { SavedRecipesContext } from "./SavedRecipesContext";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -47,9 +48,16 @@ const SearchScreenCell = (props) => (
           </View>
           <Text style={styles.tagline}>{props.tagline}</Text>
         </View>
-        <View style={styles.heartContainer}>
-          <Ionicons name="heart-outline" size={22} color="#C34946" />
-        </View>
+        <TouchableOpacity
+          onPress={props.onToggleSave}
+          style={styles.heartContainer}
+        >
+          <Ionicons
+            name={props.isSaved ? "heart" : "heart-outline"}
+            size={22}
+            color="#C34946"
+          />
+        </TouchableOpacity>
       </View>
     }
     backgroundColor="transparent"
@@ -158,9 +166,35 @@ function Settings({ navigation }) {
   );
 }
 function Saved({ navigation }) {
+  // const { savedRecipes } = useState([]);
   return (
     <SafeAreaView>
-      <View></View>
+      <ScrollView>
+        {/*  
+        {savedItems.length === 0 ? (
+          <Text style={{ textAlign: "center", marginTop: screenHeight / 20 }}>
+            No saved recipes.
+          </Text>
+        ) : (
+          savedItems.map((item, index) => (
+            <View
+              key={index}
+              style={{ alignItems: "center", marginBottom: 30 }}
+            >
+              <Image
+                source={item.imgUri}
+                style={{
+                  width: imageHeight,
+                  height: imageHeight,
+                  borderRadius: 10,
+                }}
+              />
+              <Text style={{ fontSize: 16 }}>{item.title}</Text>
+            </View>
+          ))
+        )}
+      */}
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -172,6 +206,15 @@ function ShoppingList({ navigation }) {
   );
 }
 function Search({ navigation }) {
+  const [savedRecipes, setSavedRecipes] = useState([]);
+  const toggleSave = (title, imgUri) => {
+    setSavedRecipes((prev) => {
+      const exists = prev.find((item) => item.title === title);
+      if (exists) return prev.filter((item) => item.title !== title);
+      else return [...prev, { title, imgUri }];
+    });
+  };
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -193,8 +236,21 @@ function Search({ navigation }) {
               eta="10-30"
               score="4.1"
               imgUri={require("./assets/iceCream.jpg")}
+              isSaved={
+                savedRecipes.find(
+                  (i) => i.title === "Recipe 1 Recipe 1 Recipe 1"
+                )
+                  ? true
+                  : false
+              }
+              onToggleSave={() =>
+                toggleSave(
+                  "Recipe 1 Recipe 1 Recipe 1",
+                  require("./assets/iceCream.jpg")
+                )
+              }
               action={() =>
-                navigation.navigate("Menu", {
+                navigation.navigate("Recipe", {
                   items: [
                     {
                       title: "Gelato",
@@ -225,7 +281,7 @@ function Search({ navigation }) {
               isPopular="true"
               imgUri={require("./assets/pizza.jpg")}
               action={() =>
-                navigation.navigate("Menu", {
+                navigation.navigate("Recipe", {
                   items: [
                     {
                       title: "Cheezas",
@@ -255,7 +311,7 @@ function Search({ navigation }) {
               score="4.5"
               imgUri={require("./assets/curry.jpg")}
               action={() =>
-                navigation.navigate("Menu", {
+                navigation.navigate("Recipe", {
                   items: [
                     {
                       title: "Main Dishes",
@@ -470,7 +526,7 @@ function Homescreen({ navigation }) {
   );
 }
 
-function Menu({ route, navigation }) {
+function Recipe({ route, navigation }) {
   // So we can add a quantity for each menu item
   const [quantities, setQuantities] = React.useState({});
 
@@ -572,7 +628,6 @@ function HomeStack() {
   return (
     <Stack.Navigator screenOptions={repeatedScreenOptions}>
       <Stack.Screen name="GetRecipes" component={Homescreen} />
-      <Stack.Screen name="Menu" component={Menu} />
     </Stack.Navigator>
   );
 }
@@ -609,6 +664,7 @@ function SearchStack() {
         component={Search}
         options={{ title: "Search" }}
       />
+      <Stack.Screen name="Recipe" component={Recipe} />
     </Stack.Navigator>
   );
 }
@@ -650,6 +706,7 @@ const MainStack = createNativeStackNavigator();
 
 export default function App() {
   return (
+    // <SavedRecipesContext>
     <NavigationContainer>
       <MainStack.Navigator>
         <MainStack.Screen
@@ -666,6 +723,7 @@ export default function App() {
         />
       </MainStack.Navigator>
     </NavigationContainer>
+    // </SavedRecipesContext>
   );
 }
 
