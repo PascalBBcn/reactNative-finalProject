@@ -164,31 +164,6 @@ function Settings({ navigation }) {
     </SafeAreaView>
   );
 }
-// function Saved({ navigation, savedRecipes }) {
-//   return (
-//     <SafeAreaView>
-//       <ScrollView>
-//         {savedRecipes.map((recipe, index) => (
-//           <View
-//             key={index}
-//             style={{ flexDirection: "row", padding: 10, alignItems: "center" }}
-//           >
-//             <Image
-//               source={recipe.imgUri}
-//               style={{
-//                 width: 60,
-//                 height: 60,
-//                 borderRadius: 8,
-//                 marginRight: 10,
-//               }}
-//             />
-//             <Text style={{ fontSize: 16 }}>{recipe.title}</Text>
-//           </View>
-//         ))}
-//       </ScrollView>
-//     </SafeAreaView>
-//   );
-// }
 function Saved({ navigation, savedRecipes }) {
   return (
     <SafeAreaView>
@@ -253,6 +228,19 @@ function ShoppingList({ navigation }) {
   );
 }
 function Search({ navigation, savedRecipes, toggleSave }) {
+  const [input, setInput] = useState("");
+  const [searchFilters, setSearchFilters] = useState([]);
+
+  const addSearchFilter = () => {
+    if (input.trim() !== "") {
+      setSearchFilters([...searchFilters, input.trim()]);
+      setInput("");
+    }
+  };
+  const removeSearchFilter = (searchFilterToRemove) => {
+    setSearchFilters(searchFilters.filter((f) => f !== searchFilterToRemove));
+  };
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -263,9 +251,48 @@ function Search({ navigation, savedRecipes, toggleSave }) {
             <TextInput
               style={styles.searchInput}
               placeholder="Ingredients, cuisine, dish, keyword"
+              value={input}
+              onChangeText={setInput}
+              onSubmitEditing={addSearchFilter}
             />
+            <TouchableOpacity onPress={addSearchFilter}>
+              <Ionicons name="add" size={24} color="black" />
+            </TouchableOpacity>
           </View>
         </View>
+
+        <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+          {searchFilters.map((filter, index) => (
+            <View
+              key={index}
+              style={{
+                backgroundColor: "lightgray",
+                borderRadius: 15,
+                padding: 4,
+                marginLeft: screenWidth / 25,
+                marginBottom: 10,
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Text>{filter}</Text>
+              <TouchableOpacity onPress={() => removeSearchFilter(filter)}>
+                <Ionicons name="close" size={12} color="black" />
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+        <TouchableOpacity
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginLeft: screenWidth / 25,
+          }}
+        >
+          <Ionicons name="swap-vertical" size={20} color={"black"} />
+          <Text style={{ marginLeft: 4, fontWeight: "bold" }}>Popularity</Text>
+        </TouchableOpacity>
+
         <TableView>
           <Section header="" separatorInsetLeft="0" separatorTintColor="black">
             <SearchScreenCell
@@ -766,6 +793,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingLeft: 15,
     height: 50,
+    marginBottom: -(screenHeight / 30),
   },
   searchInput: {
     marginLeft: 8,
