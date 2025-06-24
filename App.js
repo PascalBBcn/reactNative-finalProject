@@ -164,31 +164,87 @@ function Settings({ navigation }) {
     </SafeAreaView>
   );
 }
+// function Saved({ navigation, savedRecipes }) {
+//   return (
+//     <SafeAreaView>
+//       <ScrollView>
+//         {savedRecipes.map((recipe, index) => (
+//           <View
+//             key={index}
+//             style={{ flexDirection: "row", padding: 10, alignItems: "center" }}
+//           >
+//             <Image
+//               source={recipe.imgUri}
+//               style={{
+//                 width: 60,
+//                 height: 60,
+//                 borderRadius: 8,
+//                 marginRight: 10,
+//               }}
+//             />
+//             <Text style={{ fontSize: 16 }}>{recipe.title}</Text>
+//           </View>
+//         ))}
+//       </ScrollView>
+//     </SafeAreaView>
+//   );
+// }
 function Saved({ navigation, savedRecipes }) {
   return (
     <SafeAreaView>
       <ScrollView>
         {savedRecipes.map((recipe, index) => (
-          <View
+          <TouchableOpacity
             key={index}
-            style={{ flexDirection: "row", padding: 10, alignItems: "center" }}
+            onPress={() =>
+              navigation.navigate("Recipe", {
+                items: [
+                  {
+                    title: "Gelato",
+                    contents: [
+                      { title: "Vanilla" },
+                      { title: "Pistachio 🔥" },
+                      { title: "Chocolate" },
+                    ],
+                  },
+                  {
+                    title: "Cookies",
+                    contents: [
+                      { title: "Chocolate Chip" },
+                      { title: "Macadamia White Chocolate" },
+                      { title: "Peanut Butter" },
+                      { title: "Shortbread" },
+                    ],
+                  },
+                ],
+              })
+            }
           >
-            <Image
-              source={recipe.imgUri}
+            <View
               style={{
-                width: 60,
-                height: 60,
-                borderRadius: 8,
-                marginRight: 10,
+                flexDirection: "row",
+                padding: 10,
+                alignItems: "center",
               }}
-            />
-            <Text style={{ fontSize: 16 }}>{recipe.title}</Text>
-          </View>
+            >
+              <Image
+                source={recipe.imgUri}
+                style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: 8,
+                  marginRight: 10,
+                }}
+              />
+              <Text style={{ fontSize: 16 }}>{recipe.title}</Text>
+            </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
     </SafeAreaView>
   );
 }
+
 function ShoppingList({ navigation }) {
   return (
     <SafeAreaView>
@@ -523,6 +579,7 @@ function SavedStack({ savedRecipes }) {
         )}
         options={{ title: "Saved" }}
       />
+      <Stack.Screen name="Recipe" component={Recipe} />
     </Stack.Navigator>
   );
 }
