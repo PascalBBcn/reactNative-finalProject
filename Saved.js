@@ -46,7 +46,7 @@ export function Saved({ navigation, savedRecipes }) {
               }}
             >
               <Image
-                source={recipe.imgUri}
+                source={{ uri: recipe.imgUri }}
                 style={{
                   width: 60,
                   height: 60,

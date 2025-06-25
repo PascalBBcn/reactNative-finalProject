@@ -9,16 +9,13 @@ import {
   TextInput,
   Keyboard,
 } from "react-native";
-import {
-  Cell,
-  Section,
-  Separator,
-  TableView,
-} from "react-native-tableview-simple";
-import React, { useState } from "react";
+import { Cell, Section, TableView } from "react-native-tableview-simple";
+import React, { useState, useEffect } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
-
 import styles from "./styles.js";
+
+// SPOONACULAR API KEY, FREE VERSION (MAX 150 QUERIES A DAY)
+const apiKey = "90731595192b48b4806b672564913a73";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -62,6 +59,30 @@ const SearchScreenCell = (props) => (
 export function Search({ navigation, savedRecipes, toggleSave }) {
   const [input, setInput] = useState("");
   const [searchFilters, setSearchFilters] = useState([]);
+
+  const [recipes, setRecipes] = useState([]);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  const [totalResults, setTotalResults] = useState(0);
+
+  useEffect(() => {
+    getRecipes("pizza");
+  }, []);
+
+  const getRecipes = (query) => {
+    const url = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&number=50&apiKey=${apiKey}`;
+
+    fetch(url)
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json);
+        setRecipes(json.results);
+        setTotalResults(json.totalResults);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const addSearchFilter = () => {
     Keyboard.dismiss();
@@ -126,9 +147,27 @@ export function Search({ navigation, savedRecipes, toggleSave }) {
           <Text style={{ marginLeft: 4, fontWeight: "bold" }}>Popularity</Text>
         </TouchableOpacity>
 
+        <Text style={{ marginLeft: screenWidth / 25, fontWeight: "bold" }}>
+          {totalResults} results
+        </Text>
+
         <TableView style={{ backgroundColor: "#FFF5EE" }}>
           <Section header="" separatorInsetLeft="0" separatorTintColor="black">
-            <SearchScreenCell
+            {recipes.map((recipe) => (
+              <SearchScreenCell
+                key={recipe.id}
+                title={recipe.title}
+                imgUri={{ uri: recipe.image }}
+                isSaved={
+                  savedRecipes.find((i) => i.title === recipe.title)
+                    ? true
+                    : false
+                }
+                onToggleSave={() => toggleSave(recipe.title, recipe.image)}
+              />
+            ))}
+            {/* HARDCODED DUMMY DATA */}
+            {/* <SearchScreenCell
               title="Recipe 1 Recipe 1 Recipe 1"
               tagline="Desert, Ice cream, Cookies, £"
               eta="10-30"
@@ -231,7 +270,7 @@ export function Search({ navigation, savedRecipes, toggleSave }) {
                   ],
                 })
               }
-            />
+            /> */}
           </Section>
         </TableView>
       </ScrollView>
