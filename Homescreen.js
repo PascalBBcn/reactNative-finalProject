@@ -87,7 +87,16 @@ export function Homescreen({ navigation }) {
           <Text style={styles.headerTwo}>Browse by meal</Text>
           <View style={styles.row}>
             {mealTypes.map((meal) => (
-              <TouchableOpacity key={meal} style={styles.homescreenButton}>
+              <TouchableOpacity
+                key={meal}
+                onPress={() =>
+                  navigation.navigate("Search", {
+                    screen: "Search Screen",
+                    params: { startingFilter: meal },
+                  })
+                }
+                style={styles.homescreenButton}
+              >
                 <Text>{meal}</Text>
               </TouchableOpacity>
             ))}
@@ -99,6 +108,12 @@ export function Homescreen({ navigation }) {
             {cuisines.map((cuisine) => (
               <TouchableOpacity
                 key={cuisine}
+                onPress={() =>
+                  navigation.navigate("Search", {
+                    screen: "Search Screen",
+                    params: { startingFilter: cuisine },
+                  })
+                }
                 style={[
                   styles.homescreenButton,
                   {
