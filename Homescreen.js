@@ -33,13 +33,17 @@ export function Homescreen({ navigation }) {
       <ScrollView>
         <View style={styles.section}>
           <Text style={styles.header}>What would you like to cook?</Text>
-          <View style={styles.searchBar}>
-            <Ionicons name="search" size={20} color="#656565" />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Ingredients, cuisine, dish, keyword"
-            />
-          </View>
+          {/* Navigates to the search tab (not screen, as that requires variables) */}
+          <TouchableOpacity onPress={() => navigation.navigate("Search")}>
+            <View style={styles.searchBar}>
+              <Ionicons name="search" size={20} color="#656565" />
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Ingredients, cuisine, dish, keyword"
+                editable={false}
+              />
+            </View>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.section}>

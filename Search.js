@@ -71,7 +71,6 @@ export function Search({ navigation, savedRecipes, toggleSave }) {
 
   const getRecipes = (query) => {
     const url = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&number=50&apiKey=${apiKey}`;
-
     fetch(url)
       .then((response) => response.json())
       .then((json) => {
@@ -147,7 +146,13 @@ export function Search({ navigation, savedRecipes, toggleSave }) {
           <Text style={{ marginLeft: 4, fontWeight: "bold" }}>Popularity</Text>
         </TouchableOpacity>
 
-        <Text style={{ marginLeft: screenWidth / 25, fontWeight: "bold" }}>
+        <Text
+          style={{
+            marginLeft: screenWidth / 25,
+            fontSize: 12,
+            alignSelf: "center",
+          }}
+        >
           {totalResults} results
         </Text>
 
@@ -166,6 +171,7 @@ export function Search({ navigation, savedRecipes, toggleSave }) {
                 onToggleSave={() => toggleSave(recipe.title, recipe.image)}
               />
             ))}
+
             {/* HARDCODED DUMMY DATA */}
             {/* <SearchScreenCell
               title="Recipe 1 Recipe 1 Recipe 1"
