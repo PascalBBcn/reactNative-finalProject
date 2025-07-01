@@ -112,9 +112,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#ddd",
     borderRadius: 20,
     paddingVertical: 8,
-    paddingHorizontal: 16,
-    width: 100,
+    paddingHorizontal: 10,
+    width: screenWidth / 3.7,
     alignItems: "center",
+    justifyContent: "center",
   },
 });
 

@@ -6,10 +6,12 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
+  Dimensions,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 
 import styles from "./styles.js";
+const screenHeight = Dimensions.get("window").height;
 
 export function Homescreen({ navigation }) {
   const hotRecipes = [
@@ -20,12 +22,33 @@ export function Homescreen({ navigation }) {
 
   const mealTypes = ["Breakfast", "Lunch", "Dinner"];
   const cuisines = [
+    "African",
+    "Asian",
+    "American",
+    "British",
+    "Cajun",
+    "Caribbean",
+    "Chinese",
+    "Eastern European",
+    "European",
+    "French",
+    "German",
+    "Greek",
+    "Indian",
+    "Irish",
     "Italian",
     "Japanese",
-    "Indian",
-    "British",
-    "Chinese",
-    "Iranian",
+    "Jewish",
+    "Korean",
+    "Latin American",
+    "Mediterranean",
+    "Mexican",
+    "Middle Eastern",
+    "Nordic",
+    "Southern",
+    "Spanish",
+    "Thai",
+    "Vietnamese",
   ];
 
   return (
@@ -74,8 +97,18 @@ export function Homescreen({ navigation }) {
           <Text style={styles.headerTwo}>Browse by cuisine</Text>
           <View style={styles.grid}>
             {cuisines.map((cuisine) => (
-              <TouchableOpacity key={cuisine} style={styles.homescreenButton}>
-                <Text>{cuisine}</Text>
+              <TouchableOpacity
+                key={cuisine}
+                style={[
+                  styles.homescreenButton,
+                  {
+                    height: screenHeight / 15,
+                  },
+                ]}
+              >
+                <Text style={{ textAlign: "center", fontSize: 12 }}>
+                  {cuisine}
+                </Text>
               </TouchableOpacity>
             ))}
           </View>

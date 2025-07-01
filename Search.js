@@ -28,15 +28,13 @@ const SearchScreenCell = (props) => (
         <View style={styles.textContainer}>
           <Text style={styles.title}>{props.title}</Text>
           <View style={styles.starContainer}>
-            <Ionicons name="star" size={15} color="black" />
-            <Ionicons name="star" size={15} color="black" />
-            <Ionicons name="star" size={15} color="black" />
+            <Text>{props.spoonacularScore}</Text>
           </View>
+          <Text style={styles.tagline}>{props.servings} servings</Text>
           <View style={styles.timerContainer}>
             <Ionicons name="timer" size={15} color="#656565" />
-            <Text style={styles.timerText}>{props.eta} mins</Text>
+            <Text style={styles.timerText}>{props.readyInMinutes} mins</Text>
           </View>
-          <Text style={styles.tagline}>{props.tagline}</Text>
         </View>
         <TouchableOpacity
           onPress={props.onToggleSave}
@@ -70,13 +68,45 @@ export function Search({ navigation, savedRecipes, toggleSave }) {
   }, []);
 
   const getRecipes = (query) => {
-    const url = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&number=50&apiKey=${apiKey}`;
+    const url = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&number=1&apiKey=${apiKey}`;
     fetch(url)
       .then((response) => response.json())
       .then((json) => {
         console.log(json);
         setRecipes(json.results);
         setTotalResults(json.totalResults);
+
+        getDetailedInfo(json.results);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const getDetailedInfo = (recipes) => {
+    const details = recipes.map((recipe) => {
+      const url = `https://api.spoonacular.com/recipes/${recipe.id}/information?apiKey=${apiKey}`;
+      return fetch(url)
+        .then((res) => res.json())
+        .then((info) => ({
+          ...recipe,
+          spoonacularScore: info.spoonacularScore.toFixed(1),
+          readyInMinutes: info.readyInMinutes,
+          servings: info.servings,
+        }))
+        .catch((error) => {
+          console.log(error);
+          return {
+            ...recipe,
+            spoonacularScore: null,
+            readyInMinutes: null,
+            servings: null,
+          };
+        });
+    });
+    Promise.all(details)
+      .then((fullRecipes) => {
+        setRecipes(fullRecipes);
       })
       .catch((error) => {
         console.log(error);
@@ -163,6 +193,9 @@ export function Search({ navigation, savedRecipes, toggleSave }) {
                 key={recipe.id}
                 title={recipe.title}
                 imgUri={{ uri: recipe.image }}
+                spoonacularScore={recipe.spoonacularScore}
+                readyInMinutes={recipe.readyInMinutes}
+                servings={recipe.servings}
                 isSaved={
                   savedRecipes.find((i) => i.title === recipe.title)
                     ? true
