@@ -4,107 +4,97 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Switch,
   Dimensions,
+  Image,
 } from "react-native";
-import { Cell, Section, TableView } from "react-native-tableview-simple";
-import React, { useEffect } from "react";
+import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
+import React, { useState } from "react";
+import styles from "./styles.js";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 const imageHeight = Dimensions.get("window").height * 0.2;
 
 export function Recipe({ route, navigation }) {
-  // So we can add a quantity for each menu item
-  const [quantities, setQuantities] = React.useState({});
-
-  useEffect(() => {
-    const defaultValue = {};
-    route.params.items.forEach((section) => {
-      section.contents.forEach((item) => {
-        defaultValue[item.title] = 0;
-      });
-    });
-    setQuantities(defaultValue);
-  }, []);
-
-  const updateValue = (itemTitle, change) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [itemTitle]: Math.max(0, (prev[itemTitle] || 0) + change),
-    }));
-  };
+  const { recipe } = route.params;
+  const [isMetric, setIsMetric] = useState(false);
+  const toggleSwitch = () => setIsMetric((previousState) => !previousState);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF5EE" }}>
       <ScrollView>
-        <TableView>
-          {route.params.items.map((section, i) => (
-            <Section
-              key={i}
-              header={section.title}
-              headerTextStyle={{
-                fontSize: 20,
-                fontWeight: "bold",
-                color: "black",
-                fontStyle: "italic",
-                letterSpacing: 0.6,
+        <Image source={{ uri: recipe.image }} style={styles.imgLarge} />
+        <View style={styles.section}>
+          <Text style={styles.headerAlt}>{recipe.title}</Text>
+
+          <View
+            style={[
+              styles.starContainer,
+              { justifyContent: "flex-start", gap: screenWidth / 15 },
+            ]}
+          >
+            <View style={[styles.starContainer, { alignItems: "center" }]}>
+              <Text>{recipe.spoonacularScore}</Text>
+              <Ionicons name="star" size={15} color="black" />
+            </View>
+
+            <Text style={styles.tagline}>{recipe.servings} servings</Text>
+            <View style={styles.timerContainer}>
+              <Ionicons name="timer" size={15} color="#656565" />
+              <Text style={styles.timerText}>{recipe.readyInMinutes} mins</Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+            }}
+          >
+            <Text style={styles.headerTwoAlt}>Ingredients</Text>
+            <View
+              style={{
+                alignItems: "flex-end",
               }}
             >
-              {section.contents.map((cell, i) => (
-                <Cell key={i} title={cell.title}>
-                  <View
-                    style={{
-                      position: "absolute",
-                      right: imageHeight / 10,
-                      alignItems: "center",
-                      flexDirection: "row",
-                      height: "100%",
-                    }}
-                  >
-                    <TouchableOpacity
-                      onPress={() => updateValue(cell.title, -1)}
-                      style={{
-                        padding: 10,
-                        backgroundColor: "black",
-                        opacity: 0.8,
-                        borderRadius: 100,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          color: "lightgreen",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        -
-                      </Text>
-                    </TouchableOpacity>
-                    <Text
-                      style={{
-                        marginHorizontal: 10,
-                        minWidth: 20,
-                        textAlign: "center",
-                        fontSize: 20,
-                      }}
-                    >
-                      {quantities[cell.title] || 0}
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => updateValue(cell.title, 1)}
-                      style={{
-                        padding: 10,
-                        backgroundColor: "lightgreen",
-                        borderRadius: 100,
-                      }}
-                    >
-                      <Text style={{ fontWeight: "bold" }}>+</Text>
-                    </TouchableOpacity>
-                  </View>
-                </Cell>
-              ))}
-            </Section>
-          ))}
-        </TableView>
+              <Switch
+                trackColor={{ false: "#ccc", true: "#888" }}
+                thumbColor={isMetric ? "#C34946" : "#888"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch}
+                value={isMetric}
+              />
+              <Text style={{ fontSize: 12, fontStyle: "italic" }}>
+                {isMetric ? "metric" : "us    "}
+              </Text>
+            </View>
+          </View>
+
+          {recipe.ingredients.map((item, index) => {
+            const measure = isMetric
+              ? item.measures?.metric
+              : item.measures?.us;
+            const meta = item.meta?.join(", ");
+            const unit = measure?.unitShort || "";
+            const quantity = measure?.amount?.toFixed(1);
+
+            return (
+              <Text key={index} style={{ marginBottom: 4 }}>
+                <Text style={{ fontWeight: "bold" }}>• </Text>
+                <Text>
+                  {quantity} {unit} {meta ? `${meta}, ` : ""}
+                  {item.name}
+                </Text>
+              </Text>
+            );
+          })}
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.headerTwoAlt}>Instructions</Text>
+          <Text>{recipe.instructions}</Text>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

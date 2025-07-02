@@ -81,6 +81,7 @@ export function Search({ navigation, route, savedRecipes, toggleSave }) {
       console.log(startingFilter);
       setSearchFilters([startingFilter]);
     }
+    getRecipes("pizza");
   }, [route?.params?.startingFilter]);
 
   const getRecipes = (query) => {
@@ -106,9 +107,11 @@ export function Search({ navigation, route, savedRecipes, toggleSave }) {
         .then((res) => res.json())
         .then((info) => ({
           ...recipe,
-          spoonacularScore: info.spoonacularScore.toFixed(1),
+          spoonacularScore: info.spoonacularScore.toFixed(0),
           readyInMinutes: info.readyInMinutes,
           servings: info.servings,
+          ingredients: info.extendedIngredients,
+          instructions: info.instructions,
         }))
         .catch((error) => {
           console.log(error);
@@ -117,6 +120,8 @@ export function Search({ navigation, route, savedRecipes, toggleSave }) {
             spoonacularScore: null,
             readyInMinutes: null,
             servings: null,
+            ingredients: [],
+            instructions: "Error, instructions unavailable.",
           };
         });
     });
@@ -141,7 +146,7 @@ export function Search({ navigation, route, savedRecipes, toggleSave }) {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#FFF5EE" }}>
+    <SafeAreaView style={{ backgroundColor: "#FFF5EE", flex: 1 }}>
       <ScrollView>
         <View style={styles.section}>
           <Text style={styles.header}>What would you like to cook?</Text>
@@ -212,6 +217,11 @@ export function Search({ navigation, route, savedRecipes, toggleSave }) {
                 spoonacularScore={recipe.spoonacularScore}
                 readyInMinutes={recipe.readyInMinutes}
                 servings={recipe.servings}
+                action={() =>
+                  navigation.navigate("Recipe", {
+                    recipe: recipe,
+                  })
+                }
                 isSaved={
                   savedRecipes.find((i) => i.title === recipe.title)
                     ? true
