@@ -27,11 +27,16 @@ const SearchScreenCell = (props) => (
         <Image source={props.imgUri} style={styles.img} />
         <View style={styles.textContainer}>
           <Text style={styles.title}>{props.title}</Text>
-          <View style={styles.starContainer}>
+
+          <View style={styles.iconContainer}>
+            <Ionicons name="star" size={15} color="#FFB302" />
             <Text>{props.spoonacularScore}</Text>
           </View>
-          <Text style={styles.tagline}>{props.servings} servings</Text>
-          <View style={styles.timerContainer}>
+          <View style={styles.iconContainer}>
+            <Ionicons name="people" size={15} color="#656565" />
+            <Text style={styles.tagline}>{props.servings} servings</Text>
+          </View>
+          <View style={styles.iconContainer}>
             <Ionicons name="timer" size={15} color="#656565" />
             <Text style={styles.timerText}>{props.readyInMinutes} mins</Text>
           </View>

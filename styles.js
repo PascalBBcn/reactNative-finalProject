@@ -41,11 +41,7 @@ const styles = StyleSheet.create({
     marginLeft: screenWidth / 25,
     justifyContent: "flex-start",
   },
-  starContainer: {
-    flexDirection: "row",
-  },
-  timerContainer: {
-    fontSize: 1,
+  iconContainer: {
     flexDirection: "row",
     alignItems: "center",
   },

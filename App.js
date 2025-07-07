@@ -32,6 +32,7 @@ const repeatedScreenOptions = ({ navigation }) => ({
   headerTitleStyle: {
     color: "#C34946",
     fontWeight: "bold",
+    fontSize: 20,
   },
   headerRight: () => (
     <TouchableOpacity
@@ -170,6 +171,9 @@ export default function App() {
           component={Settings}
           options={{
             headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
           }}
         />
       </MainStack.Navigator>

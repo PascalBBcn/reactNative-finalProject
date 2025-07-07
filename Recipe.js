@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 import React, { useState } from "react";
+import RenderHTML from "react-native-render-html";
+
 import styles from "./styles.js";
 
 const screenWidth = Dimensions.get("window").width;
@@ -29,20 +31,39 @@ export function Recipe({ route, navigation }) {
           <Text style={styles.headerAlt}>{recipe.title}</Text>
 
           <View
-            style={[
-              styles.starContainer,
-              { justifyContent: "flex-start", gap: screenWidth / 15 },
-            ]}
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              marginVertical: 10,
+              marginBottom: screenHeight / 20,
+            }}
           >
-            <View style={[styles.starContainer, { alignItems: "center" }]}>
-              <Text>{recipe.spoonacularScore}</Text>
-              <Ionicons name="star" size={15} color="black" />
+            <View
+              style={{
+                position: "absolute",
+                left: screenWidth / 11,
+                alignItems: "center",
+              }}
+            >
+              <Ionicons name="star" size={20} color="#FFB302" />
+              <Text style={{ fontSize: 12 }}>{recipe.spoonacularScore}</Text>
             </View>
 
-            <Text style={styles.tagline}>{recipe.servings} servings</Text>
-            <View style={styles.timerContainer}>
-              <Ionicons name="timer" size={15} color="#656565" />
-              <Text style={styles.timerText}>{recipe.readyInMinutes} mins</Text>
+            <View style={{ alignItems: "center" }}>
+              <Ionicons name="people" size={20} color="#656565" />
+              <Text style={{ fontSize: 12 }}>{recipe.servings} servings</Text>
+            </View>
+
+            <View
+              style={{
+                position: "absolute",
+                right: screenWidth / 11,
+                alignItems: "center",
+              }}
+            >
+              <Ionicons name="timer" size={20} color="#656565" />
+              <Text style={{ fontSize: 12 }}>{recipe.readyInMinutes} mins</Text>
             </View>
           </View>
 
@@ -53,7 +74,9 @@ export function Recipe({ route, navigation }) {
               alignItems: "flex-start",
             }}
           >
-            <Text style={styles.headerTwoAlt}>Ingredients</Text>
+            <Text style={[styles.headerTwoAlt, { marginBottom: 0 }]}>
+              Ingredients
+            </Text>
             <View
               style={{
                 alignItems: "flex-end",
@@ -66,7 +89,14 @@ export function Recipe({ route, navigation }) {
                 onValueChange={toggleSwitch}
                 value={isMetric}
               />
-              <Text style={{ fontSize: 12, fontStyle: "italic" }}>
+              <Text
+                style={{
+                  marginTop: -4,
+                  fontSize: 12,
+                  fontStyle: "italic",
+                  fontWeight: "bold",
+                }}
+              >
                 {isMetric ? "metric" : "us    "}
               </Text>
             </View>
@@ -93,7 +123,11 @@ export function Recipe({ route, navigation }) {
         </View>
         <View style={styles.section}>
           <Text style={styles.headerTwoAlt}>Instructions</Text>
-          <Text>{recipe.instructions}</Text>
+          <RenderHTML
+            contentWidth={screenWidth}
+            source={{ html: recipe.instructions }}
+            tagsStyles={{ li: { marginBottom: 4 } }}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
