@@ -59,6 +59,21 @@ const styles = StyleSheet.create({
   heartContainer: {
     justifyContent: "center",
   },
+  heartContainerAlt: {
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    right: screenWidth / 25,
+    top: screenWidth / 25,
+    backgroundColor: "rgba(255,255,255,0.55)",
+    padding: 5,
+    borderRadius: 30,
+    shadowColor: "white",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    elevation: 3,
+  },
   // HOMESCREEN
   section: {
     marginBottom: screenHeight / 20,
@@ -145,6 +160,16 @@ const styles = StyleSheet.create({
     width: screenWidth / 3.7,
     alignItems: "center",
     justifyContent: "center",
+  },
+  recipeInfoCard: {
+    backgroundColor: "#f9f9f7",
+    borderRadius: 12,
+    padding: 15,
+    shadowColor: "#222",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
   },
 });
 

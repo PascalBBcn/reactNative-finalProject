@@ -19,14 +19,34 @@ const screenHeight = Dimensions.get("window").height;
 const imageHeight = Dimensions.get("window").height * 0.2;
 
 export function Recipe({ route, navigation }) {
-  const { recipe } = route.params;
+  const { recipe, isSaved, onToggleSave } = route.params;
   const [isMetric, setIsMetric] = useState(false);
   const toggleSwitch = () => setIsMetric((previousState) => !previousState);
+
+  const [saved, setSaved] = useState(isSaved);
+  const handleToggleSave = () => {
+    onToggleSave();
+    setSaved((prev) => !prev);
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF5EE" }}>
       <ScrollView>
-        <Image source={{ uri: recipe.image }} style={styles.imgLarge} />
+        <View style={{ position: "relative" }}>
+          <Image source={{ uri: recipe.image }} style={styles.imgLarge} />
+          <TouchableOpacity
+            onPress={handleToggleSave}
+            style={styles.heartContainerAlt}
+          >
+            <Ionicons
+              name={saved ? "heart" : "heart-outline"}
+              size={30}
+              color="#C34946"
+              top="2"
+            />
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.section}>
           <Text style={styles.headerAlt}>{recipe.title}</Text>
 
@@ -74,12 +94,12 @@ export function Recipe({ route, navigation }) {
               alignItems: "flex-start",
             }}
           >
-            <Text style={[styles.headerTwoAlt, { marginBottom: 0 }]}>
-              Ingredients
-            </Text>
+            <Text style={[styles.headerTwoAlt]}>Ingredients</Text>
             <View
               style={{
-                alignItems: "flex-end",
+                flexDirection: "row",
+                justifyContent: "flex-end",
+                alignItems: "center",
               }}
             >
               <Switch
@@ -94,40 +114,42 @@ export function Recipe({ route, navigation }) {
                   marginTop: -4,
                   fontSize: 12,
                   fontStyle: "italic",
-                  fontWeight: "bold",
                 }}
               >
                 {isMetric ? "metric" : "us    "}
               </Text>
             </View>
           </View>
+          <View style={styles.recipeInfoCard}>
+            {recipe.ingredients.map((item, index) => {
+              const measure = isMetric
+                ? item.measures?.metric
+                : item.measures?.us;
+              const meta = item.meta?.join(", ");
+              const unit = measure?.unitShort || "";
+              const quantity = measure?.amount?.toFixed(1);
 
-          {recipe.ingredients.map((item, index) => {
-            const measure = isMetric
-              ? item.measures?.metric
-              : item.measures?.us;
-            const meta = item.meta?.join(", ");
-            const unit = measure?.unitShort || "";
-            const quantity = measure?.amount?.toFixed(1);
-
-            return (
-              <Text key={index} style={{ marginBottom: 4 }}>
-                <Text style={{ fontWeight: "bold" }}>• </Text>
-                <Text>
-                  {quantity} {unit} {meta ? `${meta}, ` : ""}
-                  {item.name}
+              return (
+                <Text key={index} style={{ marginBottom: 4 }}>
+                  <Text style={{ fontWeight: "bold" }}>• </Text>
+                  <Text>
+                    {quantity} {unit} {meta ? `${meta}, ` : ""}
+                    {item.name}
+                  </Text>
                 </Text>
-              </Text>
-            );
-          })}
+              );
+            })}
+          </View>
         </View>
         <View style={styles.section}>
           <Text style={styles.headerTwoAlt}>Instructions</Text>
-          <RenderHTML
-            contentWidth={screenWidth}
-            source={{ html: recipe.instructions }}
-            tagsStyles={{ li: { marginBottom: 4 } }}
-          />
+          <View style={styles.recipeInfoCard}>
+            <RenderHTML
+              contentWidth={screenWidth}
+              source={{ html: recipe.instructions }}
+              tagsStyles={{ li: { marginBottom: 4 } }}
+            />
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

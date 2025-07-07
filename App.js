@@ -53,7 +53,7 @@ function HomeStack() {
   );
 }
 
-function SavedStack({ savedRecipes }) {
+function SavedStack({ savedRecipes, toggleSave }) {
   return (
     <Stack.Navigator screenOptions={repeatedScreenOptions}>
       <Stack.Screen
@@ -63,9 +63,13 @@ function SavedStack({ savedRecipes }) {
             navigation={navigation}
             route={route}
             savedRecipes={savedRecipes}
+            toggleSave={toggleSave}
           />
         )}
-        options={{ title: "Saved" }}
+        options={{
+          title: "Saved",
+          headerStyle: { backgroundColor: "#f9f9f7" },
+        }}
       />
       <Stack.Screen name="Recipe" component={Recipe} />
     </Stack.Navigator>
@@ -78,7 +82,10 @@ function ShoppingListStack() {
       <Stack.Screen
         name="Shopping List Screen"
         component={ShoppingList}
-        options={{ title: "Shopping List" }}
+        options={{
+          title: "Shopping List",
+          headerStyle: { backgroundColor: "#f9f9f7" },
+        }}
       />
     </Stack.Navigator>
   );
@@ -97,7 +104,10 @@ function SearchStack({ savedRecipes, toggleSave }) {
             toggleSave={toggleSave}
           />
         )}
-        options={{ title: "Search" }}
+        options={{
+          title: "Search",
+          headerStyle: { backgroundColor: "#f9f9f7" },
+        }}
       />
       <Stack.Screen name="Recipe" component={Recipe} />
     </Stack.Navigator>
@@ -133,6 +143,9 @@ function Tabs() {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
+        tabBarStyle: {
+          backgroundColor: "#f9f9f7",
+        },
         headerShown: false,
         tabBarInactiveTintColor: "gray",
         tabBarActiveTintColor: "#C34946",
@@ -141,7 +154,9 @@ function Tabs() {
     >
       <Tab.Screen
         name="Saved"
-        children={() => <SavedStack savedRecipes={savedRecipes} />}
+        children={() => (
+          <SavedStack savedRecipes={savedRecipes} toggleSave={toggleSave} />
+        )}
       />
       <Tab.Screen name="Shopping List" component={ShoppingListStack} />
       <Tab.Screen name="Home" component={HomeStack} />
@@ -164,7 +179,10 @@ export default function App() {
         <MainStack.Screen
           name="Main"
           component={Tabs}
-          options={{ headerShown: false }}
+          options={{
+            headerShown: false,
+            headerStyle: { backgroundColor: "#f9f9f7" },
+          }}
         />
         <MainStack.Screen
           name="Settings"
@@ -174,9 +192,11 @@ export default function App() {
             headerTitleStyle: {
               fontWeight: "bold",
             },
+            headerStyle: { backgroundColor: "#f9f9f7" },
           }}
         />
       </MainStack.Navigator>
+      <StatusBar style="auto" />
     </NavigationContainer>
   );
 }

@@ -222,17 +222,19 @@ export function Search({ navigation, route, savedRecipes, toggleSave }) {
                 spoonacularScore={recipe.spoonacularScore}
                 readyInMinutes={recipe.readyInMinutes}
                 servings={recipe.servings}
-                action={() =>
-                  navigation.navigate("Recipe", {
-                    recipe: recipe,
-                  })
-                }
                 isSaved={
                   savedRecipes.find((i) => i.title === recipe.title)
                     ? true
                     : false
                 }
                 onToggleSave={() => toggleSave(recipe.title, recipe.image)}
+                action={() =>
+                  navigation.navigate("Recipe", {
+                    recipe: recipe,
+                    isSaved: savedRecipes.some((i) => i.title === recipe.title),
+                    onToggleSave: () => toggleSave(recipe.title, recipe.image),
+                  })
+                }
               />
             ))}
 

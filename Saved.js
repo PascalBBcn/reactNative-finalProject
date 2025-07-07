@@ -6,8 +6,9 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 
-export function Saved({ navigation, savedRecipes }) {
+export function Saved({ navigation, savedRecipes, toggleSave }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF5EE" }}>
       <ScrollView>
@@ -43,6 +44,7 @@ export function Saved({ navigation, savedRecipes }) {
                 flexDirection: "row",
                 padding: 10,
                 alignItems: "center",
+                justifyContent: "space-between",
               }}
             >
               <Image
@@ -54,7 +56,14 @@ export function Saved({ navigation, savedRecipes }) {
                   marginRight: 10,
                 }}
               />
-              <Text style={{ fontSize: 16 }}>{recipe.title}</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 14 }}>{recipe.title}</Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => toggleSave(recipe.title, recipe.imgUri)}
+              >
+                <Ionicons name="close" size={22} color="black" />
+              </TouchableOpacity>
             </View>
           </TouchableOpacity>
         ))}
