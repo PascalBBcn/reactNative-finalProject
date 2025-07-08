@@ -11,7 +11,7 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 import React, { useState } from "react";
 import RenderHTML from "react-native-render-html";
-
+import { useSavedRecipes } from "./SavedRecipesContext.js";
 import styles from "./styles.js";
 
 const screenWidth = Dimensions.get("window").width;
@@ -19,14 +19,15 @@ const screenHeight = Dimensions.get("window").height;
 const imageHeight = Dimensions.get("window").height * 0.2;
 
 export function Recipe({ route, navigation }) {
-  const { recipe, isSaved, onToggleSave } = route.params;
+  const { recipe } = route.params;
+  const { savedRecipes, toggleSave } = useSavedRecipes();
   const [isMetric, setIsMetric] = useState(false);
   const toggleSwitch = () => setIsMetric((previousState) => !previousState);
 
-  const [saved, setSaved] = useState(isSaved);
+  const isSaved = savedRecipes.some((item) => item.title === recipe.title);
+
   const handleToggleSave = () => {
-    onToggleSave();
-    setSaved((prev) => !prev);
+    toggleSave(recipe.title, recipe.image);
   };
 
   return (
@@ -39,7 +40,7 @@ export function Recipe({ route, navigation }) {
             style={styles.heartContainerAlt}
           >
             <Ionicons
-              name={saved ? "heart" : "heart-outline"}
+              name={isSaved ? "heart" : "heart-outline"}
               size={30}
               color="#C34946"
               top="2"

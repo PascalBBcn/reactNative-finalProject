@@ -13,6 +13,7 @@ import { Cell, Section, TableView } from "react-native-tableview-simple";
 import React, { useState, useEffect } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 import styles from "./styles.js";
+import { useSavedRecipes } from "./SavedRecipesContext.js";
 
 // SPOONACULAR API KEY, FREE VERSION (MAX 150 QUERIES A DAY)
 const apiKey = "90731595192b48b4806b672564913a73";
@@ -59,7 +60,8 @@ const SearchScreenCell = (props) => (
   />
 );
 
-export function Search({ navigation, route, savedRecipes, toggleSave }) {
+export function Search({ navigation, route }) {
+  const { savedRecipes, toggleSave } = useSavedRecipes();
   const [input, setInput] = useState("");
   const [searchFilters, setSearchFilters] = useState([]);
 
@@ -230,119 +232,11 @@ export function Search({ navigation, route, savedRecipes, toggleSave }) {
                 onToggleSave={() => toggleSave(recipe.title, recipe.image)}
                 action={() =>
                   navigation.navigate("Recipe", {
-                    recipe: recipe,
-                    isSaved: savedRecipes.some((i) => i.title === recipe.title),
-                    onToggleSave: () => toggleSave(recipe.title, recipe.image),
+                    recipe,
                   })
                 }
               />
             ))}
-
-            {/* HARDCODED DUMMY DATA */}
-            {/* <SearchScreenCell
-              title="Recipe 1 Recipe 1 Recipe 1"
-              tagline="Desert, Ice cream, Cookies, £"
-              eta="10-30"
-              score="4.1"
-              imgUri={require("./assets/iceCream.jpg")}
-              isSaved={
-                savedRecipes.find(
-                  (i) => i.title === "Recipe 1 Recipe 1 Recipe 1"
-                )
-                  ? true
-                  : false
-              }
-              onToggleSave={() =>
-                toggleSave(
-                  "Recipe 1 Recipe 1 Recipe 1",
-                  require("./assets/iceCream.jpg")
-                )
-              }
-              action={() =>
-                navigation.navigate("Recipe", {
-                  items: [
-                    {
-                      title: "Gelato",
-                      contents: [
-                        { title: "Vanilla" },
-                        { title: "Pistachio 🔥" },
-                        { title: "Chocolate" },
-                      ],
-                    },
-                    {
-                      title: "Cookies",
-                      contents: [
-                        { title: "Chocolate Chip" },
-                        { title: "Macadamia White Chocolate" },
-                        { title: "Peanut Butter" },
-                        { title: "Shortbread" },
-                      ],
-                    },
-                  ],
-                })
-              }
-            />
-            <SearchScreenCell
-              title="Recipe 2"
-              tagline="Pizza, Cheese, Garlic bread, ££"
-              eta="35+"
-              score="4.3"
-              isPopular="true"
-              imgUri={require("./assets/pizza.jpg")}
-              action={() =>
-                navigation.navigate("Recipe", {
-                  items: [
-                    {
-                      title: "Cheezas",
-                      contents: [
-                        { title: "Cheeze" },
-                        { title: "Extra Cheeze" },
-                        { title: "Cheeza Supreme 🔥" },
-                      ],
-                    },
-                    {
-                      title: "Garlic Bread",
-                      contents: [
-                        { title: "Garlic" },
-                        { title: "Garlic Cheeze" },
-                        { title: "Garlic Extra Cheeze" },
-                        { title: "Garlic Cheeza Supreme" },
-                      ],
-                    },
-                  ],
-                })
-              }
-            />
-            <SearchScreenCell
-              title="Recipe 3"
-              tagline="Butter chicken, Naan, Samosa, £££"
-              eta="20-35"
-              score="4.5"
-              imgUri={require("./assets/curry.jpg")}
-              action={() =>
-                navigation.navigate("Recipe", {
-                  items: [
-                    {
-                      title: "Main Dishes",
-                      contents: [
-                        { title: "Butter Chicken 🔥" },
-                        { title: "Dal Makhani" },
-                        { title: "Palak Paneer" },
-                        { title: "Chicken Biryani" },
-                      ],
-                    },
-                    {
-                      title: "Samosas",
-                      contents: [
-                        { title: "Chicken" },
-                        { title: "Veggie" },
-                        { title: "Lamb" },
-                      ],
-                    },
-                  ],
-                })
-              }
-            /> */}
           </Section>
         </TableView>
       </ScrollView>

@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
-
-export function Saved({ navigation, savedRecipes, toggleSave }) {
+import { useSavedRecipes } from "./SavedRecipesContext";
+export function Saved({ navigation }) {
+  const { savedRecipes, toggleSave } = useSavedRecipes();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF5EE" }}>
       <ScrollView>
