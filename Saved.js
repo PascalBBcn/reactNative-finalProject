@@ -18,25 +18,7 @@ export function Saved({ navigation }) {
             key={index}
             onPress={() =>
               navigation.navigate("Recipe", {
-                items: [
-                  {
-                    title: "Gelato",
-                    contents: [
-                      { title: "Vanilla" },
-                      { title: "Pistachio 🔥" },
-                      { title: "Chocolate" },
-                    ],
-                  },
-                  {
-                    title: "Cookies",
-                    contents: [
-                      { title: "Chocolate Chip" },
-                      { title: "Macadamia White Chocolate" },
-                      { title: "Peanut Butter" },
-                      { title: "Shortbread" },
-                    ],
-                  },
-                ],
+                recipe,
               })
             }
           >

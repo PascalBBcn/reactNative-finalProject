@@ -18,7 +18,7 @@ const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 const imageHeight = Dimensions.get("window").height * 0.2;
 
-export function Recipe({ route, navigation }) {
+export function Recipe({ route }) {
   const { recipe } = route.params;
   const { savedRecipes, toggleSave } = useSavedRecipes();
   const [isMetric, setIsMetric] = useState(false);

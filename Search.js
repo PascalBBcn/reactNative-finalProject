@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
   Keyboard,
+  Modal,
 } from "react-native";
 import { Cell, Section, TableView } from "react-native-tableview-simple";
 import React, { useState, useEffect } from "react";
@@ -71,28 +72,39 @@ export function Search({ navigation, route }) {
   const [totalResults, setTotalResults] = useState(0);
 
   const startingFilter = route.params?.startingFilter;
-  console.log(startingFilter);
+
+  // For sort popup modal
+  const [sortValue, setSortValue] = useState("popularity");
+  const [sortModalVisible, setSortModalVisible] = useState(false);
+  const sortValues = [
+    { label: "Popularity", value: "popularity" },
+    { label: "Time", value: "time" },
+    { label: "Used Ingredients", value: "max-used-ingredients" },
+  ];
 
   // HELP WITH API CALL LIMIT WORRY AND GRADERS ->
   // if you are worried about API call limit,
   // cache some queries as fallback to show as an example
 
-  // useEffect(() => {
-  //   // getRecipes("pizza");
-  // }, []);
-
+  // For setting up search filters
   useEffect(() => {
     const startingFilter = route.params?.startingFilter;
-
-    if (startingFilter) {
-      console.log(startingFilter);
-      setSearchFilters([startingFilter]);
-    }
-    getRecipes("pizza");
+    if (startingFilter) setSearchFilters([startingFilter]);
   }, [route?.params?.startingFilter]);
 
-  const getRecipes = (query) => {
-    const url = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&number=1&apiKey=${apiKey}`;
+  // For querying the API
+  useEffect(() => {
+    if (searchFilters.length > 0) {
+      const query = searchFilters.join(" ");
+      getRecipes(query);
+    } else {
+      setRecipes([]);
+      setTotalResults(0);
+    }
+  }, [searchFilters]);
+
+  const getRecipes = (query, sort = sortValue) => {
+    const url = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&sort=${sort}&number=1&apiKey=${apiKey}`;
     fetch(url)
       .then((response) => response.json())
       .then((json) => {
@@ -194,6 +206,7 @@ export function Search({ navigation, route }) {
           ))}
         </View>
         <TouchableOpacity
+          onPress={() => setSortModalVisible(true)}
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -201,8 +214,56 @@ export function Search({ navigation, route }) {
           }}
         >
           <Ionicons name="swap-vertical" size={20} color={"black"} />
-          <Text style={{ marginLeft: 4, fontWeight: "bold" }}>Rating</Text>
+          <Text style={{ marginLeft: 4, fontWeight: "bold" }}>
+            {sortValue === "popularity"
+              ? "Popularity"
+              : sortValue === "time"
+              ? "Time"
+              : "Used Ingredients"}
+          </Text>
         </TouchableOpacity>
+
+        <Modal visible={sortModalVisible} transparent animationType="fade">
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "rgba(0, 0, 0, 0.2)",
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "#f9f9f7",
+                padding: screenWidth / 25,
+                marginLeft: screenWidth / 25,
+                borderRadius: 20,
+                width: screenWidth / 2.25,
+              }}
+            >
+              <TouchableOpacity onPress={() => setSortModalVisible(false)}>
+                <Ionicons name="close" size={22} color="black" />
+              </TouchableOpacity>
+              <Text style={[styles.headerTwoAlt, { alignSelf: "center" }]}>
+                Sort by
+              </Text>
+              {sortValues.map((item) => (
+                <TouchableOpacity
+                  key={item.value}
+                  onPress={() => {
+                    setSortValue(item.value);
+                    setSortModalVisible(false);
+                    // const query = searchFilters.join(" ");
+                    // getRecipes(query, item.value);
+                  }}
+                  style={{ paddingVertical: 10 }}
+                >
+                  <Text style={{ fontSize: 14 }}>{item.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </Modal>
 
         <Text
           style={{
