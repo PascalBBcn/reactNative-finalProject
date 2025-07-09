@@ -25,9 +25,8 @@ export function Recipe({ route }) {
   const toggleSwitch = () => setIsMetric((previousState) => !previousState);
 
   const isSaved = savedRecipes.some((item) => item.title === recipe.title);
-
   const handleToggleSave = () => {
-    toggleSave(recipe.title, recipe.image);
+    toggleSave(recipe);
   };
 
   return (
@@ -128,16 +127,38 @@ export function Recipe({ route }) {
                 : item.measures?.us;
               const meta = item.meta?.join(", ");
               const unit = measure?.unitShort || "";
-              const quantity = measure?.amount?.toFixed(1);
+              const amount = measure?.amount;
+
+              // Remove trailing 0's
+              const quantity =
+                amount % 1 === 0 ? amount.toString() : amount?.toFixed(1);
 
               return (
-                <Text key={index} style={{ marginBottom: 4 }}>
-                  <Text style={{ fontWeight: "bold" }}>• </Text>
-                  <Text>
-                    {quantity} {unit} {meta ? `${meta}, ` : ""}
-                    {item.name}
+                <View
+                  key={index}
+                  style={{
+                    flexDirection: "row",
+                    marginBottom: 4,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontWeight: "bold",
+                      width: 24,
+                      lineHeight: 20,
+                      marginRight: -5,
+                    }}
+                  >
+                    •
                   </Text>
-                </Text>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ lineHeight: 20 }}>
+                      {quantity} {unit}
+                      {meta ? `, ${meta}` : ""} {item.name}
+                    </Text>
+                  </View>
+                </View>
               );
             })}
           </View>
@@ -145,11 +166,40 @@ export function Recipe({ route }) {
         <View style={styles.section}>
           <Text style={styles.headerTwoAlt}>Instructions</Text>
           <View style={styles.recipeInfoCard}>
-            <RenderHTML
-              contentWidth={screenWidth}
-              source={{ html: recipe.instructions }}
-              tagsStyles={{ li: { marginBottom: 4 } }}
-            />
+            {recipe.instructions &&
+              recipe.instructions[0]?.steps.map((step) => (
+                <View
+                  key={step.number}
+                  style={{
+                    flexDirection: "row",
+                    marginBottom: 10,
+                    marginLeft: -13,
+                  }}
+                >
+                  <View style={{ width: 30, alignItems: "flex-end" }}>
+                    <Text style={{ fontWeight: "bold", marginRight: 5 }}>
+                      {step.number}.
+                    </Text>
+                  </View>
+                  <Text style={{ flex: 1 }}>{step.step}</Text>
+                </View>
+              ))}
+            {/* {recipe.analyzedInstructions?.includes("<") ? (
+              <RenderHTML
+                contentWidth={screenWidth}
+                source={{ html: recipe.analyzedInstructions }}
+                tagsStyles={{ li: { marginBottom: 4 } }}
+              />
+            ) : (
+              recipe.analyzedInstructions
+                ?.split(/(?<=\.)\s+/)
+                .filter(Boolean)
+                .map((sentence, index) => (
+                  <Text key={index} style={{ maginBottom: 10 }}>
+                    {index + 1}. {sentence.trim()}
+                  </Text>
+                ))
+            )} */}
           </View>
         </View>
       </ScrollView>

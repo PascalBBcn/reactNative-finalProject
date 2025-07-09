@@ -7,18 +7,32 @@ import {
   TextInput,
   FlatList,
   Dimensions,
+  Image,
 } from "react-native";
+import { useState, useEffect } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 
 import styles from "./styles.js";
 const screenHeight = Dimensions.get("window").height;
+const apiKey = "90731595192b48b4806b672564913a73";
+const screenWidth = Dimensions.get("window").width;
 
 export function Homescreen({ navigation }) {
-  const hotRecipes = [
-    { id: "1", name: "Recipe Name 1" },
-    { id: "2", name: "Recipe Name 2" },
-    { id: "3", name: "Recipe Name 3" },
-  ];
+  const [hotRecipes, setHotRecipes] = useState([]);
+  useEffect(() => {
+    getHotRecipes();
+  }, []);
+
+  const getHotRecipes = async () => {
+    try {
+      const url = `https://api.spoonacular.com/recipes/complexSearch?&sort=popularity&number=5&apiKey=${apiKey}`;
+      const res = await fetch(url);
+      const recipes = await res.json();
+      setHotRecipes(recipes.results);
+    } catch (error) {
+      console.error("Error getting hot recipes", error);
+    }
+  };
 
   const mealTypes = ["Breakfast", "Lunch", "Dinner"];
   const cuisines = [
@@ -75,11 +89,22 @@ export function Homescreen({ navigation }) {
             data={hotRecipes}
             horizontal
             showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <View style={styles.homescreenCard}>
-                <Text>{item.name}</Text>
-              </View>
+              <TouchableOpacity style={styles.homescreenCard}>
+                <Image
+                  source={{ uri: item.image }}
+                  style={{
+                    width: screenWidth / 3,
+                    height: screenHeight / 7,
+                  }}
+                />
+                <View style={styles.homescreenCardTextBox}>
+                  <Text style={styles.homescreenCardText} numberOfLines={4}>
+                    {item.title}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             )}
           />
         </View>

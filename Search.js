@@ -130,7 +130,7 @@ export function Search({ navigation, route }) {
           readyInMinutes: info.readyInMinutes,
           servings: info.servings,
           ingredients: info.extendedIngredients,
-          instructions: info.instructions,
+          instructions: info.analyzedInstructions,
         }))
         .catch((error) => {
           console.log(error);
@@ -253,8 +253,10 @@ export function Search({ navigation, route }) {
                   onPress={() => {
                     setSortValue(item.value);
                     setSortModalVisible(false);
-                    // const query = searchFilters.join(" ");
-                    // getRecipes(query, item.value);
+                    if (searchFilters.length > 0) {
+                      const query = searchFilters.join(" ");
+                      getRecipes(query, item.value);
+                    }
                   }}
                   style={{ paddingVertical: 10 }}
                 >
@@ -290,7 +292,7 @@ export function Search({ navigation, route }) {
                     ? true
                     : false
                 }
-                onToggleSave={() => toggleSave(recipe.title, recipe.image)}
+                onToggleSave={() => toggleSave(recipe)}
                 action={() =>
                   navigation.navigate("Recipe", {
                     recipe,

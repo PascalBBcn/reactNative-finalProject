@@ -31,7 +31,7 @@ export function Saved({ navigation }) {
               }}
             >
               <Image
-                source={{ uri: recipe.imgUri }}
+                source={{ uri: recipe.image }}
                 style={{
                   width: 60,
                   height: 60,
@@ -42,9 +42,7 @@ export function Saved({ navigation }) {
               <View style={{ flex: 1 }}>
                 <Text style={{ fontSize: 14 }}>{recipe.title}</Text>
               </View>
-              <TouchableOpacity
-                onPress={() => toggleSave(recipe.title, recipe.imgUri)}
-              >
+              <TouchableOpacity onPress={() => toggleSave(recipe)}>
                 <Ionicons name="close" size={22} color="black" />
               </TouchableOpacity>
             </View>

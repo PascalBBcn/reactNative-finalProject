@@ -5,11 +5,11 @@ export const SavedRecipesContext = createContext();
 export const SavedRecipesProvider = ({ children }) => {
   const [savedRecipes, setSavedRecipes] = useState([]);
 
-  const toggleSave = (title, imgUri) => {
+  const toggleSave = (recipe) => {
     setSavedRecipes((prev) => {
-      const exists = prev.find((item) => item.title === title);
-      if (exists) return prev.filter((item) => item.title !== title);
-      else return [...prev, { title, imgUri }];
+      const exists = prev.find((item) => item.title === recipe.title);
+      if (exists) return prev.filter((item) => item.title !== recipe.title);
+      else return [...prev, recipe];
     });
   };
 
