@@ -19,21 +19,58 @@ const screenWidth = Dimensions.get("window").width;
 
 export function Homescreen({ navigation }) {
   const [hotRecipes, setHotRecipes] = useState([]);
+
   useEffect(() => {
     getHotRecipes();
   }, []);
 
   const getHotRecipes = async () => {
     try {
-      const url = `https://api.spoonacular.com/recipes/complexSearch?&sort=popularity&number=5&apiKey=${apiKey}`;
+      const url = `https://api.spoonacular.com/recipes/complexSearch?&sort=popularity&number=1&apiKey=${apiKey}`;
       const res = await fetch(url);
       const recipes = await res.json();
       setHotRecipes(recipes.results);
+      getDetailedInfo(recipes.results);
     } catch (error) {
       console.error("Error getting hot recipes", error);
     }
   };
 
+  const getDetailedInfo = (recipes) => {
+    const details = recipes.map((recipe) => {
+      const url = `https://api.spoonacular.com/recipes/${recipe.id}/information?apiKey=${apiKey}`;
+      return fetch(url)
+        .then((res) => res.json())
+        .then((info) => ({
+          ...recipe,
+          spoonacularScore: info.spoonacularScore.toFixed(0),
+          readyInMinutes: info.readyInMinutes,
+          servings: info.servings,
+          ingredients: info.extendedIngredients,
+          instructions: info.analyzedInstructions,
+        }))
+        .catch((error) => {
+          console.log(error);
+          return {
+            ...recipe,
+            spoonacularScore: null,
+            readyInMinutes: null,
+            servings: null,
+            ingredients: [],
+            instructions: "Error, instructions unavailable.",
+          };
+        });
+    });
+    Promise.all(details)
+      .then((fullRecipes) => {
+        setHotRecipes(fullRecipes);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  // Taken from the list of all "cuisine" searches available on Spoonacular
   const mealTypes = ["Breakfast", "Lunch", "Dinner"];
   const cuisines = [
     "African",
@@ -91,7 +128,14 @@ export function Homescreen({ navigation }) {
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <TouchableOpacity style={styles.homescreenCard}>
+              <TouchableOpacity
+                style={styles.homescreenCard}
+                onPress={() =>
+                  navigation.navigate("Recipe", {
+                    recipe: item,
+                  })
+                }
+              >
                 <Image
                   source={{ uri: item.image }}
                   style={{

@@ -11,6 +11,7 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 import React, { useState } from "react";
 import RenderHTML from "react-native-render-html";
+import { useSettings } from "./SettingsContext.js";
 import { useSavedRecipes } from "./SavedRecipesContext.js";
 import styles from "./styles.js";
 
@@ -21,8 +22,7 @@ const imageHeight = Dimensions.get("window").height * 0.2;
 export function Recipe({ route }) {
   const { recipe } = route.params;
   const { savedRecipes, toggleSave } = useSavedRecipes();
-  const [isMetric, setIsMetric] = useState(false);
-  const toggleSwitch = () => setIsMetric((previousState) => !previousState);
+  const { isMetric, toggleMeasurementSystem } = useSettings();
 
   const isSaved = savedRecipes.some((item) => item.title === recipe.title);
   const handleToggleSave = () => {
@@ -106,7 +106,7 @@ export function Recipe({ route }) {
                 trackColor={{ false: "#ccc", true: "#888" }}
                 thumbColor={isMetric ? "#C34946" : "#888"}
                 ios_backgroundColor="#3e3e3e"
-                onValueChange={toggleSwitch}
+                onValueChange={toggleMeasurementSystem}
                 value={isMetric}
               />
               <Text

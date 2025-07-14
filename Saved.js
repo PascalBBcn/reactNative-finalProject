@@ -5,15 +5,39 @@ import {
   View,
   Image,
   TouchableOpacity,
+  TextInput,
+  Dimensions,
 } from "react-native";
+import React, { useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 import { useSavedRecipes } from "./SavedRecipesContext";
+import styles from "./styles";
+const screenHeight = Dimensions.get("window").height;
+
 export function Saved({ navigation }) {
   const { savedRecipes, toggleSave } = useSavedRecipes();
+  const [input, setInput] = useState("");
+
+  const filteredRecipes = savedRecipes.filter((recipe) =>
+    recipe.title.toLowerCase().includes(input.toLowerCase())
+  );
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF5EE" }}>
       <ScrollView>
-        {savedRecipes.map((recipe, index) => (
+        <View style={[styles.section, { marginTop: screenHeight / 35 }]}>
+          <View style={styles.searchBar}>
+            <Ionicons name="search" size={20} color="#656565" />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search recipes"
+              value={input}
+              onChangeText={setInput}
+            />
+          </View>
+        </View>
+
+        {filteredRecipes.map((recipe, index) => (
           <TouchableOpacity
             key={index}
             onPress={() =>

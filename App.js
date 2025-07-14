@@ -15,6 +15,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 import { SavedRecipesProvider } from "./SavedRecipesContext.js";
+import { SettingsProvider } from "./SettingsContext.js";
 
 import Settings from "./Settings.js";
 import { Homescreen } from "./Homescreen.js";
@@ -57,6 +58,7 @@ function HomeStack() {
           headerStyle: { backgroundColor: "#f9f9f7" },
         }}
       />
+      <Stack.Screen name="Recipe" component={Recipe} />
     </Stack.Navigator>
   );
 }
@@ -147,31 +149,33 @@ const MainStack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <SavedRecipesProvider>
-      <NavigationContainer>
-        <MainStack.Navigator>
-          <MainStack.Screen
-            name="Main"
-            component={Tabs}
-            options={{
-              headerShown: false,
-              headerStyle: { backgroundColor: "#f9f9f7" },
-            }}
-          />
-          <MainStack.Screen
-            name="Settings"
-            component={Settings}
-            options={{
-              headerTitleAlign: "center",
-              headerTitleStyle: {
-                fontWeight: "bold",
-              },
-              headerStyle: { backgroundColor: "#f9f9f7" },
-            }}
-          />
-        </MainStack.Navigator>
-        <StatusBar style="auto" />
-      </NavigationContainer>
-    </SavedRecipesProvider>
+    <SettingsProvider>
+      <SavedRecipesProvider>
+        <NavigationContainer>
+          <MainStack.Navigator>
+            <MainStack.Screen
+              name="Main"
+              component={Tabs}
+              options={{
+                headerShown: false,
+                headerStyle: { backgroundColor: "#f9f9f7" },
+              }}
+            />
+            <MainStack.Screen
+              name="Settings"
+              component={Settings}
+              options={{
+                headerTitleAlign: "center",
+                headerTitleStyle: {
+                  fontWeight: "bold",
+                },
+                headerStyle: { backgroundColor: "#f9f9f7" },
+              }}
+            />
+          </MainStack.Navigator>
+          <StatusBar style="auto" />
+        </NavigationContainer>
+      </SavedRecipesProvider>
+    </SettingsProvider>
   );
 }
