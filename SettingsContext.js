@@ -4,11 +4,17 @@ export const SettingsContext = createContext();
 
 export const SettingsProvider = ({ children }) => {
   const [isMetric, setIsMetric] = useState(false);
+  const [fontSize, setFontSize] = useState("default");
+
   const toggleMeasurementSystem = () =>
     setIsMetric((previousState) => !previousState);
 
+  const updateFontSize = (size) => setFontSize(size);
+
   return (
-    <SettingsContext.Provider value={{ isMetric, toggleMeasurementSystem }}>
+    <SettingsContext.Provider
+      value={{ isMetric, toggleMeasurementSystem, fontSize, updateFontSize }}
+    >
       {children}
     </SettingsContext.Provider>
   );

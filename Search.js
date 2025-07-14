@@ -85,6 +85,7 @@ export function Search({ navigation, route }) {
   // HELP WITH API CALL LIMIT WORRY AND GRADERS ->
   // if you are worried about API call limit,
   // cache some queries as fallback to show as an example
+  // ASYNC STORAGE
 
   // For setting up search filters
   useEffect(() => {

@@ -6,8 +6,14 @@ import {
   Alert,
   View,
   Text,
+  Modal,
+  TouchableOpacity,
 } from "react-native";
+import React, { useState } from "react";
 import { Cell, Section, TableView } from "react-native-tableview-simple";
+import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
+import styles from "./styles.js";
+
 import { useSettings } from "./SettingsContext";
 
 const screenWidth = Dimensions.get("window").width;
@@ -15,7 +21,20 @@ const screenHeight = Dimensions.get("window").height;
 const imageHeight = Dimensions.get("window").height * 0.2;
 
 export default function Settings({ navigation }) {
-  const { isMetric, toggleMeasurementSystem } = useSettings();
+  const { isMetric, toggleMeasurementSystem, fontSize, updateFontSize } =
+    useSettings();
+
+  // For fontSize popup modal
+  // const [sortValue, setSortValue] = useState("popularity");
+  const [settingsModalVisible, setSettingsModalVisible] = useState(false);
+
+  const changeFontSize = (size) => {
+    updateFontSize(size);
+    setSettingsModalVisible(false);
+  };
+
+  const fontSizeValues = ["Small", "Default", "Large"];
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF5EE" }}>
       <ScrollView>
@@ -177,10 +196,11 @@ export default function Settings({ navigation }) {
             <Cell
               title="Font size"
               cellStyle="Basic"
+              detail={fontSize}
               accessory="DisclosureIndicator"
               accessoryColorDisclosureIndicator={"darkgray"}
               contentContainerStyle={{ paddingRight: screenWidth / 9 }}
-              onPress={() => alert("test!")}
+              onPress={() => setSettingsModalVisible(true)}
             />
           </Section>
         </TableView>
@@ -205,6 +225,52 @@ export default function Settings({ navigation }) {
             v1.0
           </Text>
         </View>
+
+        <Modal visible={settingsModalVisible} transparent animationType="fade">
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "rgba(0, 0, 0, 0.2)",
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "#f9f9f7",
+                padding: screenWidth / 25,
+                marginLeft: screenWidth / 25,
+                borderRadius: 20,
+                width: screenWidth / 2.25,
+              }}
+            >
+              <TouchableOpacity onPress={() => setSettingsModalVisible(false)}>
+                <Ionicons name="close" size={22} color="black" />
+              </TouchableOpacity>
+              <Text style={[styles.headerTwoAlt, { alignSelf: "center" }]}>
+                Select Font Size
+              </Text>
+              {fontSizeValues.map((size) => (
+                <TouchableOpacity
+                  key={size}
+                  onPress={() => {
+                    changeFontSize(size);
+                  }}
+                  style={{ paddingVertical: 10 }}
+                >
+                  <Text
+                    style={{
+                      fontSize:
+                        size === "Small" ? 12 : size === "Large" ? 20 : 16,
+                    }}
+                  >
+                    {size}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </Modal>
       </ScrollView>
     </SafeAreaView>
   );
