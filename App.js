@@ -15,6 +15,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 import { SavedRecipesProvider } from "./SavedRecipesContext.js";
+import { ShoppingListsProvider } from "./ShoppingListsContext.js";
 import { SettingsProvider } from "./SettingsContext.js";
 
 import Settings from "./Settings.js";
@@ -22,8 +23,9 @@ import { Homescreen } from "./Homescreen.js";
 import styles from "./styles.js";
 import { Search } from "./Search.js";
 import { Saved } from "./Saved.js";
-import { ShoppingList } from "./ShoppingList.js";
+import { ShoppingLists } from "./ShoppingLists.js";
 import { Recipe } from "./Recipe.js";
+import { ShoppingList } from "./ShoppingList";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -58,15 +60,30 @@ function HomeStack() {
           headerStyle: { backgroundColor: "#f9f9f7" },
         }}
       />
-      <Stack.Screen name="Recipe" component={Recipe} />
+      <Stack.Screen
+        name="Recipe"
+        component={Recipe}
+        options={{
+          title: "Recipe",
+          headerStyle: { backgroundColor: "#f9f9f7" },
+        }}
+      />
     </Stack.Navigator>
   );
 }
-function ShoppingListStack() {
+function ShoppingListsStack() {
   return (
     <Stack.Navigator screenOptions={repeatedScreenOptions}>
       <Stack.Screen
-        name="Shopping List Screen"
+        name="Shopping Lists Screen"
+        component={ShoppingLists}
+        options={{
+          title: "Shopping Lists",
+          headerStyle: { backgroundColor: "#f9f9f7" },
+        }}
+      />
+      <Stack.Screen
+        name="ShoppingList"
         component={ShoppingList}
         options={{
           title: "Shopping List",
@@ -88,7 +105,14 @@ function SavedStack() {
           headerStyle: { backgroundColor: "#f9f9f7" },
         }}
       />
-      <Stack.Screen name="Recipe" component={Recipe} />
+      <Stack.Screen
+        name="Recipe"
+        component={Recipe}
+        options={{
+          title: "Recipe",
+          headerStyle: { backgroundColor: "#f9f9f7" },
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -119,7 +143,7 @@ function Tabs() {
           let iconName;
           if (route.name === "Saved") {
             iconName = focused ? "heart" : "heart-outline";
-          } else if (route.name === "Shopping List") {
+          } else if (route.name === "Shopping Lists") {
             iconName = focused ? "list" : "list-outline";
           } else if (route.name === "Home") {
             iconName = focused ? "home" : "home-outline";
@@ -138,7 +162,7 @@ function Tabs() {
       })}
     >
       <Tab.Screen name="Saved" component={SavedStack} />
-      <Tab.Screen name="Shopping List" component={ShoppingListStack} />
+      <Tab.Screen name="Shopping Lists" component={ShoppingListsStack} />
       <Tab.Screen name="Home" component={HomeStack} />
       <Tab.Screen name="Search" component={SearchStack} />
     </Tab.Navigator>
@@ -151,30 +175,32 @@ export default function App() {
   return (
     <SettingsProvider>
       <SavedRecipesProvider>
-        <NavigationContainer>
-          <MainStack.Navigator>
-            <MainStack.Screen
-              name="Main"
-              component={Tabs}
-              options={{
-                headerShown: false,
-                headerStyle: { backgroundColor: "#f9f9f7" },
-              }}
-            />
-            <MainStack.Screen
-              name="Settings"
-              component={Settings}
-              options={{
-                headerTitleAlign: "center",
-                headerTitleStyle: {
-                  fontWeight: "bold",
-                },
-                headerStyle: { backgroundColor: "#f9f9f7" },
-              }}
-            />
-          </MainStack.Navigator>
-          <StatusBar style="auto" />
-        </NavigationContainer>
+        <ShoppingListsProvider>
+          <NavigationContainer>
+            <MainStack.Navigator>
+              <MainStack.Screen
+                name="Main"
+                component={Tabs}
+                options={{
+                  headerShown: false,
+                  headerStyle: { backgroundColor: "#f9f9f7" },
+                }}
+              />
+              <MainStack.Screen
+                name="Settings"
+                component={Settings}
+                options={{
+                  headerTitleAlign: "center",
+                  headerTitleStyle: {
+                    fontWeight: "bold",
+                  },
+                  headerStyle: { backgroundColor: "#f9f9f7" },
+                }}
+              />
+            </MainStack.Navigator>
+            <StatusBar style="auto" />
+          </NavigationContainer>
+        </ShoppingListsProvider>
       </SavedRecipesProvider>
     </SettingsProvider>
   );

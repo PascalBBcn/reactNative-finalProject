@@ -1,3 +1,5 @@
+// I will have lists based on recipes. So a single list is related to a single recipe
+// Extra feature = merging shopping lists from multiple recipes...1 tomate (recipe 1), 2 tomatoes (recipe 2) = 3 tomatoes total
 import {
   ScrollView,
   SafeAreaView,
@@ -11,15 +13,15 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
-import { useSavedRecipes } from "./SavedRecipesContext";
+import { useShoppingLists } from "./ShoppingListsContext";
 import styles from "./styles";
 const screenHeight = Dimensions.get("window").height;
 
-export function Saved({ navigation }) {
-  const { savedRecipes, toggleSave } = useSavedRecipes();
+export function ShoppingLists({ navigation }) {
+  const { shoppingLists, toggleSaveList } = useShoppingLists();
   const [input, setInput] = useState("");
 
-  const filteredRecipes = savedRecipes.filter((recipe) =>
+  const filteredRecipes = shoppingLists.filter((recipe) =>
     recipe.title.toLowerCase().includes(input.toLowerCase())
   );
 
@@ -31,7 +33,7 @@ export function Saved({ navigation }) {
             <Ionicons name="search" size={20} color="#656565" />
             <TextInput
               style={styles.searchInput}
-              placeholder="Search recipes"
+              placeholder="Search lists"
               value={input}
               onChangeText={setInput}
             />
@@ -42,7 +44,7 @@ export function Saved({ navigation }) {
           <TouchableOpacity
             key={index}
             onPress={() =>
-              navigation.navigate("Recipe", {
+              navigation.navigate("ShoppingList", {
                 recipe,
               })
             }
@@ -70,14 +72,14 @@ export function Saved({ navigation }) {
               <TouchableOpacity
                 onPress={() =>
                   Alert.alert(
-                    "Delete recipe",
-                    "Are you sure you want to delete this recipe?",
+                    "Delete list",
+                    "Are you sure you want to delete this list?",
                     [
                       { text: "No", style: "cancel" },
                       {
                         text: "Yes",
                         onPress: () => {
-                          toggleSave(recipe);
+                          toggleSaveList(recipe);
                         },
                       },
                     ]

@@ -7,12 +7,16 @@ import {
   Switch,
   Dimensions,
   Image,
+  Platform,
+  ToastAndroid,
+  Alert,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 import React, { useState } from "react";
 import RenderHTML from "react-native-render-html";
 import { useSettings } from "./SettingsContext.js";
 import { useSavedRecipes } from "./SavedRecipesContext.js";
+import { useShoppingLists } from "./ShoppingListsContext.js";
 import styles from "./styles.js";
 
 const screenWidth = Dimensions.get("window").width;
@@ -22,11 +26,23 @@ const imageHeight = Dimensions.get("window").height * 0.2;
 export function Recipe({ route }) {
   const { recipe } = route.params;
   const { savedRecipes, toggleSave } = useSavedRecipes();
+  const { shoppingLists, toggleSaveList } = useShoppingLists();
   const { isMetric, toggleMeasurementSystem } = useSettings();
 
   const isSaved = savedRecipes.some((item) => item.title === recipe.title);
   const handleToggleSave = () => {
     toggleSave(recipe);
+  };
+
+  // Shopping list icon is slightly less obvious than heart, so give feedback message
+  const isSavedList = shoppingLists.some((item) => item.recipeId === recipe.id);
+  const handleToggleSaveList = () => {
+    toggleSaveList(recipe);
+    const msg = isSavedList
+      ? "Removed from shopping lists"
+      : "Added to shopping lists";
+    if (Platform.OS === "android") ToastAndroid.show(msg, ToastAndroid.SHORT);
+    else Alert.alert(msg);
   };
 
   return (
@@ -121,6 +137,17 @@ export function Recipe({ route }) {
             </View>
           </View>
           <View style={styles.recipeInfoCard}>
+            <TouchableOpacity
+              onPress={handleToggleSaveList}
+              style={{ position: "absolute", top: 12, right: 12 }}
+            >
+              <Ionicons
+                name={isSavedList ? "cart" : "cart-outline"}
+                size={27}
+                color="#C34946"
+              />
+            </TouchableOpacity>
+
             {recipe.ingredients.map((item, index) => {
               const measure = isMetric
                 ? item.measures?.metric
@@ -148,12 +175,13 @@ export function Recipe({ route }) {
                       width: 24,
                       lineHeight: 20,
                       marginRight: -5,
+                      minHeight: 40,
                     }}
                   >
                     •
                   </Text>
                   <View style={{ flex: 1 }}>
-                    <Text style={{ lineHeight: 20 }}>
+                    <Text style={{ lineHeight: 20, maxWidth: "90%" }}>
                       {quantity} {unit}
                       {meta ? `, ${meta}` : ""} {item.name}
                     </Text>

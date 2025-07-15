@@ -1,12 +1,76 @@
-import { SafeAreaView, View } from "react-native";
+import {
+  ScrollView,
+  SafeAreaView,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  Dimensions,
+  Alert,
+} from "react-native";
+import React, { useState } from "react";
+import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
+import { useShoppingLists } from "./ShoppingListsContext";
+import styles from "./styles";
+import { useSettings } from "./SettingsContext";
+const screenHeight = Dimensions.get("window").height;
 
-// I will have lists based on recipes. So a single list is related to a single recipe
-// Extra feature = merging shopping lists from multiple recipes...1 tomate (recipe 1), 2 tomatoes (recipe 2) = 3 tomatoes total
+export function ShoppingList({ route }) {
+  const { recipe } = route.params;
+  const { shoppingLists, toggleSaveList, toggleIngredient } =
+    useShoppingLists();
+  const { isMetric, toggleMeasurementSystem } = useSettings();
 
-export function ShoppingList({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF5EE" }}>
-      <View></View>
+      <ScrollView>
+        <View style={styles.section}>
+          <Text style={styles.headerAlt}>{recipe.title}</Text>
+          <View style={styles.recipeInfoCard}>
+            {recipe.ingredients.map((item, index) => {
+              const measure = isMetric
+                ? item.measures?.metric
+                : item.measures?.us;
+              const meta = item.meta?.join(", ");
+              const unit = measure?.unitShort || "";
+              const amount = measure?.amount;
+
+              // Remove trailing 0's
+              const quantity =
+                amount % 1 === 0 ? amount.toString() : amount?.toFixed(1);
+
+              return (
+                <View
+                  key={index}
+                  style={{
+                    flexDirection: "row",
+                    marginBottom: 10,
+                    minHeight: 45,
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => toggleIngredient(recipe.id, index)}
+                    style={{ width: 24, marginRight: 5 }}
+                  >
+                    <Ionicons
+                      name={item.checked ? "checkbox" : "square-outline"}
+                      size={22}
+                      color={"#C34946"}
+                    />
+                  </TouchableOpacity>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ lineHeight: 20, maxWidth: "95%" }}>
+                      {quantity} {unit}
+                      {meta ? `, ${meta}` : ""} {item.name}
+                    </Text>
+                  </View>
+                </View>
+              );
+            })}
+          </View>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
