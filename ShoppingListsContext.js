@@ -43,9 +43,35 @@ export const ShoppingListsProvider = ({ children }) => {
     );
   };
 
+  let mergeNumber = 0; // For recipeId
+  const mergeShoppingLists = (recipeIds) => {
+    mergeNumber++;
+    const mergedIngredients = [];
+
+    shoppingLists.forEach((list) => {
+      if (recipeIds.includes(list.recipeId)) {
+        mergedIngredients.push(...list.ingredients);
+      }
+    });
+
+    const mergedList = {
+      title: `Merged Shopping List ${mergeNumber}`,
+      image: null,
+      recipeId: `merge-${mergeNumber}`,
+      ingredients: mergedIngredients,
+    };
+
+    setShoppingLists((prev) => [...prev, mergedList]);
+  };
+
   return (
     <ShoppingListsContext.Provider
-      value={{ shoppingLists, toggleSaveList, toggleIngredient }}
+      value={{
+        shoppingLists,
+        toggleSaveList,
+        toggleIngredient,
+        mergeShoppingLists,
+      }}
     >
       {children}
     </ShoppingListsContext.Provider>
