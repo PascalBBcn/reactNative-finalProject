@@ -7,8 +7,12 @@ export const ShoppingListsProvider = ({ children }) => {
 
   const toggleSaveList = (recipe) => {
     setShoppingLists((prev) => {
-      const exists = prev.find((item) => item.recipeId === recipe.id);
-      if (exists) return prev.filter((item) => item.recipeId !== recipe.id);
+      const shoppingListId = recipe.id || recipe.recipeId;
+      const recipeAlreadyExists = prev.find(
+        (item) => item.recipeId === shoppingListId
+      );
+      if (recipeAlreadyExists)
+        return prev.filter((item) => item.recipeId !== shoppingListId);
       else {
         // New recipe also includes a custom "checked" variable to check ingredients in shoppingList
         const newRecipe = {
@@ -25,14 +29,14 @@ export const ShoppingListsProvider = ({ children }) => {
     });
   };
 
-  const toggleIngredient = (recipeId, ingredient) => {
+  const toggleIngredient = (recipeId, index) => {
     setShoppingLists((prev) =>
       prev.map((list) => {
         if (list.recipeId !== recipeId) return list;
         return {
           ...list,
-          ingredients: list.ingredients.map((i) =>
-            i.name === ingredient ? { ...i, checked: !i.checked } : i
+          ingredients: list.ingredients.map((i, ind) =>
+            ind === index ? { ...i, checked: !i.checked } : i
           ),
         };
       })

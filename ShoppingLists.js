@@ -45,7 +45,7 @@ export function ShoppingLists({ navigation }) {
             key={index}
             onPress={() =>
               navigation.navigate("ShoppingList", {
-                recipe,
+                recipeId: recipe.recipeId,
               })
             }
           >

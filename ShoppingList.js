@@ -17,10 +17,22 @@ import { useSettings } from "./SettingsContext";
 const screenHeight = Dimensions.get("window").height;
 
 export function ShoppingList({ route }) {
-  const { recipe } = route.params;
-  const { shoppingLists, toggleSaveList, toggleIngredient } =
-    useShoppingLists();
+  const { recipeId } = route.params;
+  const { shoppingLists, toggleIngredient } = useShoppingLists();
+  const recipe = shoppingLists.find((i) => i.recipeId === recipeId);
   const { isMetric, toggleMeasurementSystem } = useSettings();
+
+  if (!recipe) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF5EE" }}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text>This shopping list was deleted.</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF5EE" }}>
@@ -50,7 +62,7 @@ export function ShoppingList({ route }) {
                   }}
                 >
                   <TouchableOpacity
-                    onPress={() => toggleIngredient(recipe.id, index)}
+                    onPress={() => toggleIngredient(recipeId, index)}
                     style={{ width: 24, marginRight: 5 }}
                   >
                     <Ionicons
