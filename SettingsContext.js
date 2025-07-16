@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 export const SettingsContext = createContext();
 
@@ -21,3 +21,14 @@ export const SettingsProvider = ({ children }) => {
 };
 
 export const useSettings = () => useContext(SettingsContext);
+
+export const getFontSizeIncrement = (fontSizeValue) => {
+  switch (fontSizeValue) {
+    case "Small":
+      return -4;
+    case "Large":
+      return 4;
+    default:
+      return 0;
+  }
+};

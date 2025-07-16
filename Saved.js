@@ -12,10 +12,15 @@ import {
 import React, { useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 import { useSavedRecipes } from "./SavedRecipesContext";
-import styles from "./styles";
+import { myStyles } from "./styles";
+import { useSettings, getFontSizeIncrement } from "./SettingsContext.js";
+
 const screenHeight = Dimensions.get("window").height;
 
 export function Saved({ navigation }) {
+  const { fontSize } = useSettings();
+  const fontSizeIncr = getFontSizeIncrement(fontSize);
+  const styles = myStyles(fontSizeIncr);
   const { savedRecipes, toggleSave } = useSavedRecipes();
   const [input, setInput] = useState("");
 
@@ -65,7 +70,9 @@ export function Saved({ navigation }) {
                 }}
               />
               <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: 14 }}>{recipe.title}</Text>
+                <Text style={{ fontSize: 14 + fontSizeIncr }}>
+                  {recipe.title}
+                </Text>
               </View>
               <TouchableOpacity
                 onPress={() =>

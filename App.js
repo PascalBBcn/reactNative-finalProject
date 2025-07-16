@@ -20,7 +20,7 @@ import { SettingsProvider } from "./SettingsContext.js";
 
 import Settings from "./Settings.js";
 import { Homescreen } from "./Homescreen.js";
-import styles from "./styles.js";
+import { myStyles } from "./styles";
 import { Search } from "./Search.js";
 import { Saved } from "./Saved.js";
 import { ShoppingLists } from "./ShoppingLists.js";

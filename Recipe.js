@@ -14,16 +14,19 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 import React, { useState } from "react";
 import RenderHTML from "react-native-render-html";
-import { useSettings } from "./SettingsContext.js";
+import { useSettings, getFontSizeIncrement } from "./SettingsContext.js";
 import { useSavedRecipes } from "./SavedRecipesContext.js";
 import { useShoppingLists } from "./ShoppingListsContext.js";
-import styles from "./styles.js";
+import { myStyles } from "./styles";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 const imageHeight = Dimensions.get("window").height * 0.2;
 
 export function Recipe({ route }) {
+  const { fontSize } = useSettings();
+  const fontSizeIncr = getFontSizeIncrement(fontSize);
+  const styles = myStyles(fontSizeIncr);
   const { recipe } = route.params;
   const { savedRecipes, toggleSave } = useSavedRecipes();
   const { shoppingLists, toggleSaveList } = useShoppingLists();
@@ -83,12 +86,16 @@ export function Recipe({ route }) {
               }}
             >
               <Ionicons name="star" size={20} color="#FFB302" />
-              <Text style={{ fontSize: 12 }}>{recipe.spoonacularScore}</Text>
+              <Text style={{ fontSize: 12 + fontSizeIncr }}>
+                {recipe.spoonacularScore}
+              </Text>
             </View>
 
             <View style={{ alignItems: "center" }}>
               <Ionicons name="people" size={20} color="#656565" />
-              <Text style={{ fontSize: 12 }}>{recipe.servings} servings</Text>
+              <Text style={{ fontSize: 12 + fontSizeIncr }}>
+                {recipe.servings} servings
+              </Text>
             </View>
 
             <View
@@ -99,7 +106,9 @@ export function Recipe({ route }) {
               }}
             >
               <Ionicons name="timer" size={20} color="#656565" />
-              <Text style={{ fontSize: 12 }}>{recipe.readyInMinutes} mins</Text>
+              <Text style={{ fontSize: 12 + fontSizeIncr }}>
+                {recipe.readyInMinutes} mins
+              </Text>
             </View>
           </View>
 
@@ -128,7 +137,7 @@ export function Recipe({ route }) {
               <Text
                 style={{
                   marginTop: -4,
-                  fontSize: 12,
+                  fontSize: 12 + fontSizeIncr,
                   fontStyle: "italic",
                 }}
               >
@@ -170,7 +179,7 @@ export function Recipe({ route }) {
                 >
                   <Text
                     style={{
-                      fontSize: 20,
+                      fontSize: 20 + fontSizeIncr,
                       fontWeight: "bold",
                       width: 24,
                       lineHeight: 20,
@@ -181,7 +190,13 @@ export function Recipe({ route }) {
                     •
                   </Text>
                   <View style={{ flex: 1 }}>
-                    <Text style={{ lineHeight: 20, maxWidth: "90%" }}>
+                    <Text
+                      style={{
+                        fontSize: 14 + fontSizeIncr,
+                        lineHeight: 20,
+                        maxWidth: "90%",
+                      }}
+                    >
                       {quantity} {unit}
                       {meta ? `, ${meta}` : ""} {item.name}
                     </Text>
@@ -209,7 +224,9 @@ export function Recipe({ route }) {
                       {step.number}.
                     </Text>
                   </View>
-                  <Text style={{ flex: 1 }}>{step.step}</Text>
+                  <Text style={{ flex: 1, fontSize: 14 + fontSizeIncr }}>
+                    {step.step}
+                  </Text>
                 </View>
               ))}
             {/* {recipe.analyzedInstructions?.includes("<") ? (

@@ -12,12 +12,17 @@ import {
 import { useState, useEffect } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 
-import styles from "./styles.js";
+import { myStyles } from "./styles";
+import { useSettings, getFontSizeIncrement } from "./SettingsContext.js";
 const screenHeight = Dimensions.get("window").height;
 const apiKey = "90731595192b48b4806b672564913a73";
 const screenWidth = Dimensions.get("window").width;
 
 export function Homescreen({ navigation }) {
+  const { fontSize } = useSettings();
+  const fontSizeIncr = getFontSizeIncrement(fontSize);
+  const styles = myStyles(fontSizeIncr);
+  console.log(styles);
   const [hotRecipes, setHotRecipes] = useState([]);
 
   useEffect(() => {
@@ -164,7 +169,10 @@ export function Homescreen({ navigation }) {
                     params: { startingFilter: meal },
                   })
                 }
-                style={styles.homescreenButton}
+                style={[
+                  styles.homescreenButton,
+                  { fontSize: 14 + fontSizeIncr },
+                ]}
               >
                 <Text>{meal}</Text>
               </TouchableOpacity>
@@ -190,7 +198,9 @@ export function Homescreen({ navigation }) {
                   },
                 ]}
               >
-                <Text style={{ textAlign: "center", fontSize: 12 }}>
+                <Text
+                  style={{ textAlign: "center", fontSize: 12 + fontSizeIncr }}
+                >
                   {cuisine}
                 </Text>
               </TouchableOpacity>

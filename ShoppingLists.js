@@ -14,10 +14,15 @@ import {
 import React, { useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 import { useShoppingLists } from "./ShoppingListsContext";
-import styles from "./styles";
+import { myStyles } from "./styles";
+import { useSettings, getFontSizeIncrement } from "./SettingsContext.js";
+
 const screenHeight = Dimensions.get("window").height;
 
 export function ShoppingLists({ navigation }) {
+  const { fontSize } = useSettings();
+  const fontSizeIncr = getFontSizeIncrement(fontSize);
+  const styles = myStyles(fontSizeIncr);
   const { shoppingLists, toggleSaveList, mergeShoppingLists } =
     useShoppingLists();
   const [input, setInput] = useState("");
@@ -116,7 +121,9 @@ export function ShoppingLists({ navigation }) {
                     }}
                   />
                   <View style={{ flex: 1 }}>
-                    <Text style={{ fontSize: 14 }}>{recipe.title}</Text>
+                    <Text style={{ fontSize: 14 + fontSizeIncr }}>
+                      {recipe.title}
+                    </Text>
                   </View>
                   {isMerging ? (
                     <Ionicons
@@ -171,7 +178,6 @@ export function ShoppingLists({ navigation }) {
 // import React, { useState } from "react";
 // import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 // import { useShoppingLists } from "./ShoppingListsContext";
-// import styles from "./styles";
 // const screenHeight = Dimensions.get("window").height;
 
 // export function ShoppingLists({ navigation }) {

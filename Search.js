@@ -13,8 +13,9 @@ import {
 import { Cell, Section, TableView } from "react-native-tableview-simple";
 import React, { useState, useEffect } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
-import styles from "./styles.js";
+import { myStyles } from "./styles";
 import { useSavedRecipes } from "./SavedRecipesContext.js";
+import { useSettings, getFontSizeIncrement } from "./SettingsContext.js";
 
 // SPOONACULAR API KEY, FREE VERSION (MAX 150 QUERIES A DAY)
 const apiKey = "90731595192b48b4806b672564913a73";
@@ -62,6 +63,9 @@ const SearchScreenCell = (props) => (
 );
 
 export function Search({ navigation, route }) {
+  const { fontSize } = useSettings();
+  const fontSizeIncr = getFontSizeIncrement(fontSize);
+  const styles = myStyles(fontSizeIncr);
   const { savedRecipes, toggleSave } = useSavedRecipes();
   const [input, setInput] = useState("");
   const [searchFilters, setSearchFilters] = useState([]);
@@ -261,7 +265,9 @@ export function Search({ navigation, route }) {
                   }}
                   style={{ paddingVertical: 10 }}
                 >
-                  <Text style={{ fontSize: 14 }}>{item.label}</Text>
+                  <Text style={{ fontSize: 14 + fontSizeIncr }}>
+                    {item.label}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -271,7 +277,7 @@ export function Search({ navigation, route }) {
         <Text
           style={{
             marginLeft: screenWidth / 25,
-            fontSize: 12,
+            fontSize: 12 + fontSizeIncr,
             alignSelf: "center",
           }}
         >

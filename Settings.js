@@ -12,9 +12,9 @@ import {
 import React, { useState } from "react";
 import { Cell, Section, TableView } from "react-native-tableview-simple";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
-import styles from "./styles.js";
+import { myStyles } from "./styles";
 
-import { useSettings } from "./SettingsContext";
+import { useSettings, getFontSizeIncrement } from "./SettingsContext.js";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -23,6 +23,8 @@ const imageHeight = Dimensions.get("window").height * 0.2;
 export default function Settings({ navigation }) {
   const { isMetric, toggleMeasurementSystem, fontSize, updateFontSize } =
     useSettings();
+  const fontSizeIncr = getFontSizeIncrement(fontSize);
+  const styles = myStyles(fontSizeIncr);
 
   // For fontSize popup modal
   // const [sortValue, setSortValue] = useState("popularity");

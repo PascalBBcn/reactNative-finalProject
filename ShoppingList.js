@@ -12,11 +12,15 @@ import {
 import React, { useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 import { useShoppingLists } from "./ShoppingListsContext";
-import styles from "./styles";
-import { useSettings } from "./SettingsContext";
+import { myStyles } from "./styles";
+import { useSettings, getFontSizeIncrement } from "./SettingsContext.js";
+
 const screenHeight = Dimensions.get("window").height;
 
 export function ShoppingList({ route }) {
+  const { fontSize } = useSettings();
+  const fontSizeIncr = getFontSizeIncrement(fontSize);
+  const styles = myStyles(fontSizeIncr);
   const { recipeId } = route.params;
   const { shoppingLists, toggleIngredient } = useShoppingLists();
   const recipe = shoppingLists.find((i) => i.recipeId === recipeId);
