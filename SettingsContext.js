@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+// Used to store basic settings data locally, persists until uninstall
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const SettingsContext = createContext();
 
@@ -6,10 +8,38 @@ export const SettingsProvider = ({ children }) => {
   const [isMetric, setIsMetric] = useState(false);
   const [fontSize, setFontSize] = useState("default");
 
-  const toggleMeasurementSystem = () =>
-    setIsMetric((previousState) => !previousState);
+  useEffect(() => {
+    const getSettingsData = async () => {
+      try {
+        const measurementValue = await AsyncStorage.getItem("@isMetric");
+        const fontSizeValue = await AsyncStorage.getItem("@fontSize");
 
-  const updateFontSize = (size) => setFontSize(size);
+        if (measurementValue !== null) setIsMetric(measurementValue === "true");
+        if (fontSizeValue !== null) setFontSize(fontSizeValue);
+      } catch (e) {
+        console.error("Failed getting settings data: ", e);
+      }
+    };
+    getSettingsData();
+  }, []);
+
+  const toggleMeasurementSystem = async () => {
+    try {
+      const updatedValue = !isMetric;
+      setIsMetric(updatedValue);
+      await AsyncStorage.setItem("@isMetric", updatedValue.toString());
+    } catch (e) {
+      console.error("Failed to save measurement value: ", e);
+    }
+  };
+  const updateFontSize = async (size) => {
+    try {
+      setFontSize(size);
+      await AsyncStorage.setItem("@fontSize", size);
+    } catch (e) {
+      console.error("Failed to save font size: ", e);
+    }
+  };
 
   return (
     <SettingsContext.Provider

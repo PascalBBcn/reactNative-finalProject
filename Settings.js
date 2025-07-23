@@ -166,7 +166,14 @@ export default function Settings({ navigation }) {
           >
             <Cell
               cellStyle="Basic"
-              title={`Metric system: ${isMetric ? "metric" : "us"}`}
+              title={
+                <Text>
+                  Metric system:{" "}
+                  <Text style={{ fontWeight: "bold" }}>
+                    {isMetric ? "metric" : "us"}
+                  </Text>
+                </Text>
+              }
               cellAccessoryView={
                 <Switch
                   value={isMetric}
@@ -249,7 +256,7 @@ export default function Settings({ navigation }) {
               <TouchableOpacity onPress={() => setSettingsModalVisible(false)}>
                 <Ionicons name="close" size={22} color="black" />
               </TouchableOpacity>
-              <Text style={[styles.headerTwoAlt, { alignSelf: "center" }]}>
+              <Text style={[styles.headerTwoAlt, { textAlign: "center" }]}>
                 Select Font Size
               </Text>
               {fontSizeValues.map((size) => (
@@ -264,6 +271,7 @@ export default function Settings({ navigation }) {
                     style={{
                       fontSize:
                         size === "Small" ? 12 : size === "Large" ? 20 : 16,
+                      fontWeight: fontSize === size ? 900 : "normal",
                     }}
                   >
                     {size}

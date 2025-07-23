@@ -22,7 +22,6 @@ export function Homescreen({ navigation }) {
   const { fontSize } = useSettings();
   const fontSizeIncr = getFontSizeIncrement(fontSize);
   const styles = myStyles(fontSizeIncr);
-  console.log(styles);
   const [hotRecipes, setHotRecipes] = useState([]);
 
   useEffect(() => {

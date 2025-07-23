@@ -59,6 +59,7 @@ export const myStyles = (fontSizeIncr = 0) =>
     },
     heartContainer: {
       justifyContent: "center",
+      alignSelf: "Center",
     },
     heartContainerAlt: {
       position: "absolute",

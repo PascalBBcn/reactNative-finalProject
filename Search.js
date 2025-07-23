@@ -22,45 +22,48 @@ const apiKey = "90731595192b48b4806b672564913a73";
 
 const screenWidth = Dimensions.get("window").width;
 
-const SearchScreenCell = (props) => (
-  <Cell
-    {...props}
-    cellContentView={
-      <View style={styles.cellContent}>
-        <Image source={props.imgUri} style={styles.img} />
-        <View style={styles.textContainer}>
-          <Text style={styles.title}>{props.title}</Text>
+const SearchScreenCell = (props) => {
+  const styles = props.styles;
+  return (
+    <Cell
+      {...props}
+      cellContentView={
+        <View style={styles.cellContent}>
+          <Image source={props.imgUri} style={styles.img} />
+          <View style={styles.textContainer}>
+            <Text style={styles.title}>{props.title}</Text>
 
-          <View style={styles.iconContainer}>
-            <Ionicons name="star" size={15} color="#FFB302" />
-            <Text>{props.spoonacularScore}</Text>
+            <View style={styles.iconContainer}>
+              <Ionicons name="star" size={15} color="#FFB302" />
+              <Text>{props.spoonacularScore}</Text>
+            </View>
+            <View style={styles.iconContainer}>
+              <Ionicons name="people" size={15} color="#656565" />
+              <Text style={styles.tagline}>{props.servings} servings</Text>
+            </View>
+            <View style={styles.iconContainer}>
+              <Ionicons name="timer" size={15} color="#656565" />
+              <Text style={styles.timerText}>{props.readyInMinutes} mins</Text>
+            </View>
           </View>
-          <View style={styles.iconContainer}>
-            <Ionicons name="people" size={15} color="#656565" />
-            <Text style={styles.tagline}>{props.servings} servings</Text>
-          </View>
-          <View style={styles.iconContainer}>
-            <Ionicons name="timer" size={15} color="#656565" />
-            <Text style={styles.timerText}>{props.readyInMinutes} mins</Text>
-          </View>
+          <TouchableOpacity
+            onPress={props.onToggleSave}
+            style={styles.heartContainer}
+          >
+            <Ionicons
+              name={props.isSaved ? "heart" : "heart-outline"}
+              size={22}
+              color="#C34946"
+            />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={props.onToggleSave}
-          style={styles.heartContainer}
-        >
-          <Ionicons
-            name={props.isSaved ? "heart" : "heart-outline"}
-            size={22}
-            color="#C34946"
-          />
-        </TouchableOpacity>
-      </View>
-    }
-    backgroundColor="#FFF5EE"
-    highlightUnderlayColor="#ccc"
-    onPress={props.action}
-  />
-);
+      }
+      backgroundColor="#FFF5EE"
+      highlightUnderlayColor="#ccc"
+      onPress={props.action}
+    />
+  );
+};
 
 export function Search({ navigation, route }) {
   const { fontSize } = useSettings();
@@ -305,6 +308,7 @@ export function Search({ navigation, route }) {
                     recipe,
                   })
                 }
+                styles={styles}
               />
             ))}
           </Section>
