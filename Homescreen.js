@@ -9,6 +9,7 @@ import {
   Dimensions,
   Image,
 } from "react-native";
+
 import { useState, useEffect } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 

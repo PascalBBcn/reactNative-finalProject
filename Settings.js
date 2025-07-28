@@ -9,6 +9,7 @@ import {
   Modal,
   TouchableOpacity,
 } from "react-native";
+import firebase from "./firebase";
 import React, { useState } from "react";
 import { Cell, Section, TableView } from "react-native-tableview-simple";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
@@ -92,9 +93,18 @@ export default function Settings({ navigation }) {
                   {
                     text: "Yes",
                     onPress: () => {
-                      Alert.alert("Log out", "See you soon!", [
-                        { text: "Close" },
-                      ]);
+                      firebase
+                        .auth()
+                        .signOut()
+                        .then(() => {
+                          navigation.reset({
+                            index: 0,
+                            routes: [{ name: "RegisterLoginScreen" }],
+                          });
+                        })
+                        .catch((e) => {
+                          Alert.alert("Logout error", e.message);
+                        });
                     },
                   },
                 ])

@@ -9,6 +9,10 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
+
+// import "./firebaseAsyncFix";
+// import FirebaseTest from "./firebaseTest";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useState, useEffect, useContext } from "react";
@@ -26,6 +30,7 @@ import { Saved } from "./Saved.js";
 import { ShoppingLists } from "./ShoppingLists.js";
 import { Recipe } from "./Recipe.js";
 import { ShoppingList } from "./ShoppingList";
+import { RegisterLoginScreen } from "./RegisterLoginScreen.js";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -178,6 +183,16 @@ export default function App() {
         <ShoppingListsProvider>
           <NavigationContainer>
             <MainStack.Navigator>
+              {/* <MainStack.Screen name="firebaseTest" component={FirebaseTest} /> */}
+
+              <MainStack.Screen
+                name="RegisterLoginScreen"
+                component={RegisterLoginScreen}
+                options={{
+                  headerShown: false,
+                  headerStyle: { backgroundColor: "#f9f9f7" },
+                }}
+              />
               <MainStack.Screen
                 name="Main"
                 component={Tabs}

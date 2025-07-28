@@ -32,7 +32,7 @@ export const myStyles = (fontSizeIncr = 0) =>
       borderRadius: 15,
       width: "100%",
       flexDirection: "row",
-      height: imageHeight * 1.25,
+      minHeight: imageHeight * 1.25,
       paddingRight: screenWidth / 25,
     },
     textContainer: {

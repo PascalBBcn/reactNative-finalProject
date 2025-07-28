@@ -1,3 +1,4 @@
+// USES ASYNC STORAGE BUT THIS DOES NOT WORK WITH FIREBASE V8, AND ONLY FIREBASE V8 WORKS WITH EXPO SNACKS
 import React, { createContext, useContext, useEffect, useState } from "react";
 // Used to store basic settings data locally, persists until uninstall
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -62,3 +63,38 @@ export const getFontSizeIncrement = (fontSizeValue) => {
       return 0;
   }
 };
+
+// import React, { createContext, useContext, useState } from "react";
+
+// export const SettingsContext = createContext();
+
+// export const SettingsProvider = ({ children }) => {
+//   const [isMetric, setIsMetric] = useState(false);
+//   const [fontSize, setFontSize] = useState("default");
+
+//   const toggleMeasurementSystem = () =>
+//     setIsMetric((previousState) => !previousState);
+
+//   const updateFontSize = (size) => setFontSize(size);
+
+//   return (
+//     <SettingsContext.Provider
+//       value={{ isMetric, toggleMeasurementSystem, fontSize, updateFontSize }}
+//     >
+//       {children}
+//     </SettingsContext.Provider>
+//   );
+// };
+
+// export const useSettings = () => useContext(SettingsContext);
+
+// export const getFontSizeIncrement = (fontSizeValue) => {
+//   switch (fontSizeValue) {
+//     case "Small":
+//       return -4;
+//     case "Large":
+//       return 4;
+//     default:
+//       return 0;
+//   }
+// };

@@ -66,6 +66,17 @@ const SearchScreenCell = (props) => {
 };
 
 export function Search({ navigation, route }) {
+  const dummyRecipe = {
+    id: 1,
+    title: "One-Pot Creamy Tomato Pasta with Basil",
+    spoonacularScore: 88,
+    servings: 2,
+    readyInMinutes: 25,
+    isSaved: false,
+    imgUri: { uri: "https://via.placeholder.com/100x100.png?text=Pasta" },
+  };
+  const dummyRecipes = [dummyRecipe];
+
   const { fontSize } = useSettings();
   const fontSizeIncr = getFontSizeIncrement(fontSize);
   const styles = myStyles(fontSizeIncr);
@@ -311,6 +322,21 @@ export function Search({ navigation, route }) {
                 styles={styles}
               />
             ))}
+            {/* DUMMY FOR ALLOWING DEVELOPMENT IF 0 API CALLS LEFT */}
+            {/* {dummyRecipes.map((recipe) => (
+              <SearchScreenCell
+                key={recipe.id}
+                imgUri={recipe.imgUri}
+                title={recipe.title}
+                spoonacularScore={recipe.spoonacularScore}
+                servings={recipe.servings}
+                readyInMinutes={recipe.readyInMinutes}
+                isSaved={recipe.isSaved}
+                onToggleSave={() => console.log("Toggled save for", recipe.id)}
+                action={() => console.log("Pressed", recipe.id)}
+                styles={styles}
+              />
+            ))} */}
           </Section>
         </TableView>
       </ScrollView>
