@@ -8,6 +8,7 @@ import {
   Text,
   Modal,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
 import firebase from "./firebase";
 import React, { useState } from "react";
@@ -30,6 +31,9 @@ export default function Settings({ navigation }) {
   // For fontSize popup modal
   // const [sortValue, setSortValue] = useState("popularity");
   const [settingsModalVisible, setSettingsModalVisible] = useState(false);
+  const [confirmDeleteModalVisible, setConfirmDeleteModalVisible] =
+    useState(false);
+  const [confirmDeletePassword, setConfirmDeletePassword] = useState("");
 
   const changeFontSize = (size) => {
     updateFontSize(size);
@@ -120,12 +124,29 @@ export default function Settings({ navigation }) {
                     { text: "No", style: "cancel" },
                     {
                       text: "Yes",
-                      onPress: () => {
-                        Alert.alert(
-                          "Delete account",
-                          "This action is permanent.",
-                          [{ text: "Close" }]
-                        );
+                      onPress: async () => {
+                        const user = firebase.auth().currentUser;
+                        if (user) {
+                          try {
+                            await user.delete();
+                            Alert.alert("Account successfully delete");
+                            navigation.reset({
+                              index: 0,
+                              routes: [{ name: "RegisterLoginScreen" }],
+                            });
+                          } catch (e) {
+                            if (e.code === "auth/requires-recent-login") {
+                              setConfirmDeleteModalVisible(true);
+                            } else {
+                              Alert.alert("Error deleting account", e.message);
+                            }
+                          }
+                        }
+                        // Alert.alert(
+                        //   "Delete account",
+                        //   "This action is permanent.",
+                        //   [{ text: "Close" }]
+                        // );
                       },
                     },
                   ]
@@ -288,6 +309,46 @@ export default function Settings({ navigation }) {
                   </Text>
                 </TouchableOpacity>
               ))}
+            </View>
+          </View>
+        </Modal>
+        <Modal
+          visible={confirmDeleteModalVisible}
+          transparent
+          animationType="fade"
+        >
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "rgba(0, 0, 0, 0.2)",
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "#f9f9f7",
+                padding: screenWidth / 25,
+                marginLeft: screenWidth / 25,
+                borderRadius: 20,
+                width: screenWidth / 2.25,
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => setConfirmDeleteModalVisible(false)}
+              >
+                <Ionicons name="close" size={22} color="black" />
+              </TouchableOpacity>
+              <Text style={[styles.headerTwoAlt, { textAlign: "center" }]}>
+                Re-enter your password
+              </Text>
+              <TextInput
+                style={styles.searchInput}
+                secureTextEntry
+                placeholder="Password"
+                value="confirmDeletePassword"
+                onChangeText={setConfirmDeletePassword}
+              ></TextInput>
             </View>
           </View>
         </Modal>

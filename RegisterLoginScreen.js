@@ -77,6 +77,7 @@ export function RegisterLoginScreen({ navigation }) {
                 style={[styles.searchInput, { opacity: 0.6 }]}
                 placeholder="Password"
                 value={password}
+                autoCapitalize="none"
                 onChangeText={setPassword}
                 secureTextEntry
               />

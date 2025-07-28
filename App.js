@@ -10,8 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-// import "./firebaseAsyncFix";
-// import FirebaseTest from "./firebaseTest";
+import "./firebaseAsyncFix";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -183,8 +182,6 @@ export default function App() {
         <ShoppingListsProvider>
           <NavigationContainer>
             <MainStack.Navigator>
-              {/* <MainStack.Screen name="firebaseTest" component={FirebaseTest} /> */}
-
               <MainStack.Screen
                 name="RegisterLoginScreen"
                 component={RegisterLoginScreen}
