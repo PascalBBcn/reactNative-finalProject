@@ -16,10 +16,15 @@ import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navi
 import { useShoppingLists } from "./ShoppingListsContext";
 import { myStyles } from "./styles";
 import { useSettings, getFontSizeIncrement } from "./SettingsContext.js";
+import firebase from "./firebase";
 
 const screenHeight = Dimensions.get("window").height;
 
 export function ShoppingLists({ navigation }) {
+  // If user signed in as a guest, render this page differently
+  const userIsGuest =
+    firebase.auth().currentUser && firebase.auth().currentUser.isAnonymous;
+
   const { fontSize } = useSettings();
   const fontSizeIncr = getFontSizeIncrement(fontSize);
   const styles = myStyles(fontSizeIncr);
@@ -57,109 +62,122 @@ export function ShoppingLists({ navigation }) {
   const filteredRecipes = shoppingLists.filter((recipe) =>
     recipe.title.toLowerCase().includes(input.toLowerCase())
   );
-
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF5EE" }}>
-      <ScrollView>
-        <View style={[styles.section, { marginTop: screenHeight / 35 }]}>
-          <View style={styles.searchBar}>
-            <Ionicons name="search" size={20} color="#656565" />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search lists"
-              value={input}
-              onChangeText={setInput}
-            />
+  if (userIsGuest) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF5EE" }}>
+        <ScrollView>
+          <View style={[styles.section, { marginTop: screenHeight / 35 }]}>
+            <Text style={styles.headerTwo}>
+              Please sign in to use shopping lists
+            </Text>
           </View>
-        </View>
-        <View style={[styles.section, { flexDirection: "row", gap: 20 }]}>
-          <TouchableOpacity
-            onPress={() => setIsMerging((prev) => !prev)}
-            style={styles.homescreenButton}
-          >
-            <Text style={{ fontWeight: "bold" }}>{mergeButtonText}</Text>
-          </TouchableOpacity>
-          {isMerging ? (
+        </ScrollView>
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF5EE" }}>
+        <ScrollView>
+          <View style={[styles.section, { marginTop: screenHeight / 35 }]}>
+            <View style={styles.searchBar}>
+              <Ionicons name="search" size={20} color="#656565" />
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search lists"
+                value={input}
+                onChangeText={setInput}
+              />
+            </View>
+          </View>
+          <View style={[styles.section, { flexDirection: "row", gap: 20 }]}>
             <TouchableOpacity
-              onPress={() => setIsMerging(true)}
+              onPress={() => setIsMerging((prev) => !prev)}
               style={styles.homescreenButton}
             >
-              <Text>{confirmButton}</Text>
+              <Text style={{ fontWeight: "bold" }}>{mergeButtonText}</Text>
             </TouchableOpacity>
-          ) : null}
-        </View>
-        <View style={styles.section}>
-          {filteredRecipes.map((recipe, index) => {
-            const isSelected = selectedLists.includes(recipe.recipeId);
-
-            return (
+            {isMerging ? (
               <TouchableOpacity
-                key={index}
-                onPress={() =>
-                  isMerging
-                    ? toggleSelectedLists(recipe.recipeId)
-                    : navigation.navigate("ShoppingList", {
-                        recipeId: recipe.recipeId,
-                      })
-                }
+                onPress={() => setIsMerging(true)}
+                style={styles.homescreenButton}
               >
-                <View
-                  style={{
-                    flexDirection: "row",
-
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Image
-                    source={{ uri: recipe.image }}
-                    style={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: 8,
-                      marginRight: 10,
-                    }}
-                  />
-                  <View style={{ flex: 1 }}>
-                    <Text style={{ fontSize: 14 + fontSizeIncr }}>
-                      {recipe.title}
-                    </Text>
-                  </View>
-                  {isMerging ? (
-                    <Ionicons
-                      name={isSelected ? "checkbox" : "square-outline"}
-                      size={25}
-                      color={"#C34946"}
-                    />
-                  ) : (
-                    <TouchableOpacity
-                      onPress={() =>
-                        Alert.alert(
-                          "Delete list",
-                          "Are you sure you want to delete this list?",
-                          [
-                            { text: "No", style: "cancel" },
-                            {
-                              text: "Yes",
-                              onPress: () => {
-                                toggleSaveList(recipe);
-                              },
-                            },
-                          ]
-                        )
-                      }
-                    >
-                      <Ionicons name="close" size={22} color="black" />
-                    </TouchableOpacity>
-                  )}
-                </View>
+                <Text>{confirmButton}</Text>
               </TouchableOpacity>
-            );
-          })}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
+            ) : null}
+          </View>
+          <View style={styles.section}>
+            {filteredRecipes.map((recipe, index) => {
+              const isSelected = selectedLists.includes(recipe.recipeId);
+
+              return (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() =>
+                    isMerging
+                      ? toggleSelectedLists(recipe.recipeId)
+                      : navigation.navigate("ShoppingList", {
+                          recipeId: recipe.recipeId,
+                        })
+                  }
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Image
+                      source={{ uri: recipe.image }}
+                      style={{
+                        width: 60,
+                        height: 60,
+                        borderRadius: 8,
+                        marginRight: 10,
+                      }}
+                    />
+                    <View style={{ flex: 1 }}>
+                      <Text style={{ fontSize: 14 + fontSizeIncr }}>
+                        {recipe.title}
+                      </Text>
+                    </View>
+                    {isMerging ? (
+                      <Ionicons
+                        name={isSelected ? "checkbox" : "square-outline"}
+                        size={25}
+                        color={"#C34946"}
+                      />
+                    ) : (
+                      <TouchableOpacity
+                        onPress={() =>
+                          Alert.alert(
+                            "Delete list",
+                            "Are you sure you want to delete this list?",
+                            [
+                              { text: "No", style: "cancel" },
+                              {
+                                text: "Yes",
+                                onPress: () => {
+                                  toggleSaveList(recipe);
+                                },
+                              },
+                            ]
+                          )
+                        }
+                      >
+                        <Ionicons name="close" size={22} color="black" />
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 }
 
 // // I will have lists based on recipes. So a single list is related to a single recipe

@@ -43,6 +43,14 @@ export function RegisterLoginScreen({ navigation }) {
     }
   };
 
+  const guestSignIn = () => {
+    firebase
+      .auth()
+      .signInAnonymously()
+      .then(() => navigation.replace("Main"))
+      .catch((e) => Alert.alert("Error", e.message));
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF5EE" }}>
       <ScrollView>
@@ -116,6 +124,9 @@ export function RegisterLoginScreen({ navigation }) {
                     <Text style={{ fontWeight: "bold" }}> Log in</Text>
                   </Text>
                 )}
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => guestSignIn()}>
+                <Text>Continue as guest</Text>
               </TouchableOpacity>
             </View>
           </View>

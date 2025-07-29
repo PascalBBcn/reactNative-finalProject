@@ -18,12 +18,16 @@ import { useSettings, getFontSizeIncrement } from "./SettingsContext.js";
 import { useSavedRecipes } from "./SavedRecipesContext.js";
 import { useShoppingLists } from "./ShoppingListsContext.js";
 import { myStyles } from "./styles";
-
+import firebase from "./firebase";
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 const imageHeight = Dimensions.get("window").height * 0.2;
 
 export function Recipe({ route }) {
+  // If user signed in as a guest, remove shopping list functionality
+  const userIsGuest =
+    firebase.auth().currentUser && firebase.auth().currentUser.isAnonymous;
+
   const { fontSize } = useSettings();
   const fontSizeIncr = getFontSizeIncrement(fontSize);
   const styles = myStyles(fontSizeIncr);
@@ -40,6 +44,16 @@ export function Recipe({ route }) {
   // Shopping list icon is slightly less obvious than heart, so give feedback message
   const isSavedList = shoppingLists.some((item) => item.recipeId === recipe.id);
   const handleToggleSaveList = () => {
+    if (userIsGuest) {
+      if (Platform.OS === "android") {
+        ToastAndroid.show(
+          "Please sign in to use shopping lists",
+          ToastAndroid.SHORT
+        );
+      } else Alert.alert("Please sign in to use shopping lists");
+      return;
+    }
+
     toggleSaveList(recipe);
     const msg = isSavedList
       ? "Removed from shopping lists"
