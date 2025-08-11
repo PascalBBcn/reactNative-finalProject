@@ -564,7 +564,10 @@ export default function Settings({ navigation }) {
               marginBottom: 20,
             }}
           >
-            v1.0
+            v1.0{" "}
+            <Text style={{ fontStyle: "italic" }}>
+              - Powered by Spoonacular
+            </Text>
           </Text>
         </View>
 

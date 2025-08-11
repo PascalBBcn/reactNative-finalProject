@@ -437,7 +437,7 @@ export function Search({ navigation, route }) {
   const [errorMsg, setErrorMsg] = useState(null);
 
   const [totalResults, setTotalResults] = useState(0);
-
+  const [startIndex, setStartIndex] = useState(0);
   const startingFilter = route.params?.startingFilter;
 
   // For sort popup modal
@@ -446,6 +446,7 @@ export function Search({ navigation, route }) {
   const sortValues = [
     { label: "Popularity", value: "popularity" },
     { label: "Time", value: "time" },
+    { label: "Healthiness", value: "healthiness" },
     { label: "Used Ingredients", value: "max-used-ingredients" },
   ];
 
@@ -471,23 +472,27 @@ export function Search({ navigation, route }) {
     }
   }, [searchFilters]);
 
-  const getRecipes = (query, sort = sortValue) => {
-    const url = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&sort=${sort}&number=1&apiKey=${apiKey}`;
+  const getRecipes = (
+    query,
+    sort = sortValue,
+    append = false,
+    newStartIndex = 0
+  ) => {
+    const url = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&sort=${sort}&number=1&startIndex=${newStartIndex}&apiKey=${apiKey}`;
     fetch(url)
       .then((response) => response.json())
       .then((json) => {
         console.log(json);
-        setRecipes(json.results);
         setTotalResults(json.totalResults);
 
-        getDetailedInfo(json.results);
+        getDetailedInfo(json.results, append);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const getDetailedInfo = (recipes) => {
+  const getDetailedInfo = (recipes, append = false) => {
     const details = recipes.map((recipe) => {
       const url = `https://api.spoonacular.com/recipes/${recipe.id}/information?apiKey=${apiKey}`;
       return fetch(url)
@@ -514,7 +519,9 @@ export function Search({ navigation, route }) {
     });
     Promise.all(details)
       .then((fullRecipes) => {
-        setRecipes(fullRecipes);
+        setRecipes((prev) =>
+          append ? [...prev, ...fullRecipes] : fullRecipes
+        );
       })
       .catch((error) => {
         console.log(error);
@@ -587,6 +594,8 @@ export function Search({ navigation, route }) {
               ? "Popularity"
               : sortValue === "time"
               ? "Time"
+              : sortValue === "healthiness"
+              ? "Healthiness"
               : "Used Ingredients"}
           </Text>
         </TouchableOpacity>
@@ -647,7 +656,7 @@ export function Search({ navigation, route }) {
           {totalResults} results
         </Text>
 
-        {/* {recipes.map((recipe) => (
+        {recipes.map((recipe) => (
           <SearchScreenCell
             key={recipe.id}
             title={recipe.title}
@@ -666,9 +675,33 @@ export function Search({ navigation, route }) {
             }
             styles={styles}
           />
-        ))} */}
+        ))}
+        {recipes.length < totalResults && (
+          <TouchableOpacity
+            style={{ margin: 20 }}
+            onPress={() => {
+              const newStartIndex = startIndex + 3;
+              setStartIndex(newStartIndex);
+              getRecipes(
+                searchFilters.join(" "),
+                sortValue,
+                true,
+                newStartIndex
+              );
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 14 + fontSizeIncr,
+                alignSelf: "center",
+              }}
+            >
+              Load more
+            </Text>
+          </TouchableOpacity>
+        )}
         {/* DUMMY FOR ALLOWING DEVELOPMENT IF 0 API CALLS LEFT */}
-        {dummyRecipes.map((recipe) => (
+        {/* {dummyRecipes.map((recipe) => (
           <SearchScreenCell
             key={recipe.id}
             imgUri={recipe.imgUri}
@@ -681,7 +714,7 @@ export function Search({ navigation, route }) {
             action={() => console.log("Pressed", recipe.id)}
             styles={styles}
           />
-        ))}
+        ))} */}
       </ScrollView>
     </SafeAreaView>
   );
