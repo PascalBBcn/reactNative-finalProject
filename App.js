@@ -1,20 +1,10 @@
 import { StatusBar } from "expo-status-bar";
-import {
-  ScrollView,
-  StyleSheet,
-  SafeAreaView,
-  Text,
-  View,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-} from "react-native";
+import { TouchableOpacity } from "react-native";
 
 import "./firebaseAsyncFix";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { useState, useEffect, useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 import { SavedRecipesProvider } from "./SavedRecipesContext.js";
@@ -23,17 +13,12 @@ import { SettingsProvider } from "./SettingsContext.js";
 
 import Settings from "./Settings.js";
 import { Homescreen } from "./Homescreen.js";
-import { myStyles } from "./styles";
 import { Search } from "./Search.js";
 import { Saved } from "./Saved.js";
 import { ShoppingLists } from "./ShoppingLists.js";
 import { Recipe } from "./Recipe.js";
 import { ShoppingList } from "./ShoppingList";
 import { RegisterLoginScreen } from "./RegisterLoginScreen.js";
-
-const screenWidth = Dimensions.get("window").width;
-const screenHeight = Dimensions.get("window").height;
-const imageHeight = Dimensions.get("window").height * 0.2;
 
 const repeatedScreenOptions = ({ navigation }) => ({
   headerTitleAlign: "center",

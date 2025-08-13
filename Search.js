@@ -437,7 +437,7 @@ export function Search({ navigation, route }) {
   const [errorMsg, setErrorMsg] = useState(null);
 
   const [totalResults, setTotalResults] = useState(0);
-  const [startIndex, setStartIndex] = useState(0);
+  const [offset, setOffset] = useState(0);
   const startingFilter = route.params?.startingFilter;
 
   // For sort popup modal
@@ -449,6 +449,7 @@ export function Search({ navigation, route }) {
     { label: "Healthiness", value: "healthiness" },
     { label: "Used Ingredients", value: "max-used-ingredients" },
   ];
+  const [sortDirection, setSortDirection] = useState("desc");
 
   // HELP WITH API CALL LIMIT WORRY AND GRADERS ->
   // if you are worried about API call limit,
@@ -476,15 +477,14 @@ export function Search({ navigation, route }) {
     query,
     sort = sortValue,
     append = false,
-    newStartIndex = 0
+    newOffset = 0,
+    sortDir = sortDirection
   ) => {
-    const url = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&sort=${sort}&number=1&startIndex=${newStartIndex}&apiKey=${apiKey}`;
+    const url = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&sort=${sort}&sortDirection=${sortDir}&number=1&offset=${newOffset}&apiKey=${apiKey}`;
     fetch(url)
       .then((response) => response.json())
       .then((json) => {
-        console.log(json);
         setTotalResults(json.totalResults);
-
         getDetailedInfo(json.results, append);
       })
       .catch((error) => {
@@ -593,7 +593,7 @@ export function Search({ navigation, route }) {
             {sortValue === "popularity"
               ? "Popularity"
               : sortValue === "time"
-              ? "Time"
+              ? `Time (${sortDirection})`
               : sortValue === "healthiness"
               ? "Healthiness"
               : "Used Ingredients"}
@@ -629,16 +629,33 @@ export function Search({ navigation, route }) {
                   key={item.value}
                   onPress={() => {
                     setSortValue(item.value);
+                    if (item.value === "time") {
+                      setSortDirection((prev) =>
+                        prev === "asc" ? "desc" : "asc"
+                      );
+                    } else setSortDirection("desc");
+
                     setSortModalVisible(false);
                     if (searchFilters.length > 0) {
                       const query = searchFilters.join(" ");
-                      getRecipes(query, item.value);
+                      getRecipes(
+                        query,
+                        item.value,
+                        false,
+                        0,
+                        item.value === "time"
+                          ? sortDirection === "asc"
+                            ? "desc"
+                            : "asc"
+                          : "desc"
+                      );
                     }
                   }}
                   style={{ paddingVertical: 10 }}
                 >
                   <Text style={{ fontSize: 14 + fontSizeIncr }}>
                     {item.label}
+                    {item.value === "time" ? ` (${sortDirection})` : ""}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -680,14 +697,9 @@ export function Search({ navigation, route }) {
           <TouchableOpacity
             style={{ margin: 20 }}
             onPress={() => {
-              const newStartIndex = startIndex + 3;
-              setStartIndex(newStartIndex);
-              getRecipes(
-                searchFilters.join(" "),
-                sortValue,
-                true,
-                newStartIndex
-              );
+              const newOffset = offset + 3;
+              setOffset(newOffset);
+              getRecipes(searchFilters.join(" "), sortValue, true, newOffset);
             }}
           >
             <Text
