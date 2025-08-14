@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   ScrollView,
-  StyleSheet,
   SafeAreaView,
   Text,
   View,
@@ -94,7 +93,10 @@ export function RegisterLoginScreen({ navigation }) {
           <View style={[styles.section, { alignItems: "center" }]}>
             <TouchableOpacity
               onPress={authenticate}
-              style={styles.homescreenButton}
+              style={[
+                styles.homescreenButton,
+                { borderWidth: 1.5, borderColor: "red" },
+              ]}
             >
               <Text style={{ fontWeight: "bold" }}>
                 {loginFormActive ? "Login" : "Register"}
@@ -110,23 +112,30 @@ export function RegisterLoginScreen({ navigation }) {
                 onPress={() => setLoginFormActive(!loginFormActive)}
                 style={[
                   styles.homescreenButton,
-                  { height: screenHeight / 20, width: "70%" },
+                  { height: screenHeight / 20, width: "70%", borderWidth: 0 },
                 ]}
               >
                 {loginFormActive ? (
-                  <Text>
-                    New here?{" "}
-                    <Text style={{ fontWeight: "bold" }}> Register</Text>
-                  </Text>
+                  <Text style={{ fontWeight: "bold" }}> Register</Text>
                 ) : (
-                  <Text>
-                    Welcome back!{" "}
-                    <Text style={{ fontWeight: "bold" }}> Log in</Text>
-                  </Text>
+                  <Text style={{ fontWeight: "bold" }}> Log in</Text>
                 )}
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => guestSignIn()}>
-                <Text>Continue as guest</Text>
+              <TouchableOpacity
+                onPress={() => guestSignIn()}
+                style={[
+                  styles.homescreenButton,
+                  {
+                    height: screenHeight / 20,
+                    width: "70%",
+                    marginTop: 10,
+                    borderWidth: 0,
+                  },
+                ]}
+              >
+                <Text>
+                  Continue as <Text style={{ fontWeight: "bold" }}>guest</Text>
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
