@@ -226,4 +226,25 @@ export const myStyles = (fontSizeIncr = 0) =>
     settingsText: {
       fontSize: 16 + fontSizeIncr,
     },
+    settingsModalContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "rgba(0, 0, 0, 0.2)",
+    },
+    settingsModalContent: {
+      backgroundColor: "#f9f9f7",
+      padding: screenWidth / 25,
+      marginLeft: screenWidth / 25,
+      borderRadius: 20,
+      width: screenWidth / 2.25,
+    },
+    settingsLogoLarge: {
+      alignSelf: "center",
+      color: "#C34946",
+      fontWeight: "bold",
+      marginTop: 10,
+      fontSize: 30,
+    },
+    settingsLogoSmall: { alignSelf: "center", fontSize: 12, marginBottom: 30 },
   });

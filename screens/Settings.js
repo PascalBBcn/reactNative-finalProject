@@ -2,7 +2,6 @@ import {
   ScrollView,
   SafeAreaView,
   Switch,
-  Dimensions,
   Alert,
   View,
   Text,
@@ -19,8 +18,6 @@ import {
   useSettings,
   getFontSizeIncrement,
 } from "../contexts/SettingsContext.js";
-
-const screenWidth = Dimensions.get("window").width;
 
 export default function Settings({ navigation }) {
   const { isMetric, toggleMeasurementSystem, fontSize, updateFontSize } =
@@ -187,24 +184,8 @@ export default function Settings({ navigation }) {
         </View>
 
         <View>
-          <Text
-            style={{
-              alignSelf: "center",
-              color: "#C34946",
-              fontWeight: "bold",
-              marginTop: 10,
-              fontSize: 30,
-            }}
-          >
-            GetRecipes
-          </Text>
-          <Text
-            style={{
-              alignSelf: "center",
-              fontSize: 12,
-              marginBottom: 20,
-            }}
-          >
+          <Text style={styles.settingsLogoLarge}>GetRecipes</Text>
+          <Text style={styles.settingsLogoSmall}>
             v1.0{" "}
             <Text style={{ fontStyle: "italic" }}>
               - Powered by Spoonacular
@@ -213,23 +194,8 @@ export default function Settings({ navigation }) {
         </View>
 
         <Modal visible={settingsModalVisible} transparent animationType="fade">
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "rgba(0, 0, 0, 0.2)",
-            }}
-          >
-            <View
-              style={{
-                backgroundColor: "#f9f9f7",
-                padding: screenWidth / 25,
-                marginLeft: screenWidth / 25,
-                borderRadius: 20,
-                width: screenWidth / 2.25,
-              }}
-            >
+          <View style={styles.settingsModalContainer}>
+            <View style={styles.settingsModalContent}>
               <TouchableOpacity onPress={() => setSettingsModalVisible(false)}>
                 <Ionicons name="close" size={22} color="black" />
               </TouchableOpacity>
@@ -263,23 +229,8 @@ export default function Settings({ navigation }) {
           transparent
           animationType="fade"
         >
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "rgba(0, 0, 0, 0.2)",
-            }}
-          >
-            <View
-              style={{
-                backgroundColor: "#f9f9f7",
-                padding: screenWidth / 25,
-                marginLeft: screenWidth / 25,
-                borderRadius: 20,
-                width: screenWidth / 2.25,
-              }}
-            >
+          <View style={styles.settingsModalContainer}>
+            <View style={styles.settingsModalContent}>
               <TouchableOpacity
                 onPress={() => setConfirmDeleteModalVisible(false)}
               >
