@@ -7,6 +7,7 @@ export const ShoppingListsProvider = ({ children }) => {
   const [shoppingLists, setShoppingLists] = useState([]);
 
   useEffect(() => {
+    // Ensure always the currently logged in user is the relevant one
     const updateUser = firebase.auth().onAuthStateChanged((newUser) => {
       setUser(newUser);
     });
@@ -15,6 +16,7 @@ export const ShoppingListsProvider = ({ children }) => {
 
   useEffect(() => {
     if (user === null) return;
+    // Ensures updates are real time in firestore
     const unsubscribe = firebase
       .firestore()
       .collection("users")

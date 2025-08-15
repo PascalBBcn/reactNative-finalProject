@@ -9,6 +9,7 @@ export const SavedRecipesProvider = ({ children }) => {
   const [savedRecipes, setSavedRecipes] = useState([]);
 
   useEffect(() => {
+    // Ensure always the currently logged in user is the relevant one
     const updateUser = firebase.auth().onAuthStateChanged(async (newUser) => {
       setUser(newUser);
     });
@@ -20,6 +21,7 @@ export const SavedRecipesProvider = ({ children }) => {
       try {
         if (user === null) return; // Wait until authentication has completed
         if (user && !user.isAnonymous) {
+          // Get the saved recipes from the db of the logged in user
           const snap = await firebase
             .firestore()
             .collection("users")
@@ -29,6 +31,7 @@ export const SavedRecipesProvider = ({ children }) => {
           const recipes = snap.docs.map((doc) => doc.data());
           setSavedRecipes(recipes);
         } else {
+          // If user is guest, load from local storage
           const recipes = await AsyncStorage.getItem("@savedRecipes");
           setSavedRecipes(recipes ? JSON.parse(recipes) : []);
         }
@@ -40,6 +43,7 @@ export const SavedRecipesProvider = ({ children }) => {
   }, [user]);
 
   const toggleSave = async (recipe) => {
+    // Toggle between adding or removing recipe
     const exists = savedRecipes.find((item) => item.id === recipe.id);
     if (user && !user.isAnonymous) {
       const docRef = firebase
@@ -48,7 +52,6 @@ export const SavedRecipesProvider = ({ children }) => {
         .doc(user.uid)
         .collection("savedRecipes")
         .doc(recipe.id.toString());
-
       try {
         if (exists) {
           await docRef.delete();

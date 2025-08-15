@@ -1,4 +1,3 @@
-// USES ASYNC STORAGE BUT THIS DOES NOT WORK WITH FIREBASE V8, AND ONLY FIREBASE V8 WORKS WITH EXPO SNACKS
 import React, { createContext, useContext, useEffect, useState } from "react";
 // Used to store basic settings data locally, persists until uninstall
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -10,6 +9,7 @@ export const SettingsProvider = ({ children }) => {
   const [fontSize, setFontSize] = useState("default");
 
   useEffect(() => {
+    // Loading settings from local storage
     const getSettingsData = async () => {
       try {
         const measurementValue = await AsyncStorage.getItem("@isMetric");
@@ -24,6 +24,7 @@ export const SettingsProvider = ({ children }) => {
     getSettingsData();
   }, []);
 
+  // Toggle between metric/us measurement system (local persistence)
   const toggleMeasurementSystem = async () => {
     try {
       const updatedValue = !isMetric;
@@ -33,6 +34,7 @@ export const SettingsProvider = ({ children }) => {
       console.error("Failed to save measurement value: ", e);
     }
   };
+  // (local persistence)
   const updateFontSize = async (size) => {
     try {
       setFontSize(size);

@@ -21,16 +21,19 @@ export function RegisterLoginScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const [loginFormActive, setLoginFormActive] = useState(true);
 
+  // Either login/register form depending on which is active
   const authenticate = () => {
     if (!email || !password)
       return Alert.alert("Error logging in", "email and password required");
     if (loginFormActive) {
+      // Login
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(() => navigation.replace("Main"))
         .catch((e) => Alert.alert("Error logging in", e.message));
     } else {
+      // New user
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)

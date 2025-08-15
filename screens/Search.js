@@ -70,17 +70,6 @@ export const SearchScreenCell = (props) => {
 };
 
 export function Search({ navigation, route }) {
-  const dummyRecipe = {
-    id: 1,
-    title: "One-Pot Creamy Tomato Pasta with Basil",
-    spoonacularScore: 88,
-    servings: 2,
-    readyInMinutes: 25,
-    isSaved: false,
-    imgUri: { uri: "https://via.placeholder.com/100x100.png?text=Pasta" },
-  };
-  const dummyRecipes = [dummyRecipe];
-
   const { fontSize } = useSettings();
   const fontSizeIncr = getFontSizeIncrement(fontSize);
   const styles = myStyles(fontSizeIncr);
@@ -105,11 +94,6 @@ export function Search({ navigation, route }) {
     { label: "Used Ingredients", value: "max-used-ingredients" },
   ];
   const [sortDirection, setSortDirection] = useState("desc");
-
-  // HELP WITH API CALL LIMIT WORRY AND GRADERS ->
-  // if you are worried about API call limit,
-  // cache some queries as fallback to show as an example
-  // ASYNC STORAGE
 
   // For setting up search filters
   useEffect(() => {
@@ -315,21 +299,6 @@ export function Search({ navigation, route }) {
             </Text>
           </TouchableOpacity>
         )}
-        {/* DUMMY FOR ALLOWING DEVELOPMENT IF 0 API CALLS LEFT */}
-        {/* {dummyRecipes.map((recipe) => (
-          <SearchScreenCell
-            key={recipe.id}
-            imgUri={recipe.imgUri}
-            title={recipe.title}
-            spoonacularScore={recipe.spoonacularScore}
-            servings={recipe.servings}
-            readyInMinutes={recipe.readyInMinutes}
-            isSaved={recipe.isSaved}
-            onToggleSave={() => console.log("Toggled save for", recipe.id)}
-            action={() => console.log("Pressed", recipe.id)}
-            styles={styles}
-          />
-        ))} */}
       </ScrollView>
     </SafeAreaView>
   );

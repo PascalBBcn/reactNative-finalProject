@@ -1,8 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { TouchableOpacity } from "react-native";
-
+// Used to allow AsyncStorage compatibility with firebase v8
 import "./firebaseAsyncFix";
-
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
