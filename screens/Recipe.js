@@ -12,16 +12,16 @@ import {
   Alert,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
-import React, { useState } from "react";
-import RenderHTML from "react-native-render-html";
-import { useSettings, getFontSizeIncrement } from "./SettingsContext.js";
-import { useSavedRecipes } from "./SavedRecipesContext.js";
-import { useShoppingLists } from "./ShoppingListsContext.js";
-import { myStyles } from "./styles";
-import firebase from "./firebase";
+import {
+  useSettings,
+  getFontSizeIncrement,
+} from "../contexts/SettingsContext.js";
+import { useSavedRecipes } from "../contexts/SavedRecipesContext.js";
+import { useShoppingLists } from "../contexts/ShoppingListsContext.js";
+import { myStyles } from "../styles";
+import firebase from "../firebase";
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
-const imageHeight = Dimensions.get("window").height * 0.2;
 
 export function Recipe({ route }) {
   // If user signed in as a guest, remove shopping list functionality
@@ -243,22 +243,6 @@ export function Recipe({ route }) {
                   </Text>
                 </View>
               ))}
-            {/* {recipe.analyzedInstructions?.includes("<") ? (
-              <RenderHTML
-                contentWidth={screenWidth}
-                source={{ html: recipe.analyzedInstructions }}
-                tagsStyles={{ li: { marginBottom: 4 } }}
-              />
-            ) : (
-              recipe.analyzedInstructions
-                ?.split(/(?<=\.)\s+/)
-                .filter(Boolean)
-                .map((sentence, index) => (
-                  <Text key={index} style={{ maginBottom: 10 }}>
-                    {index + 1}. {sentence.trim()}
-                  </Text>
-                ))
-            )} */}
           </View>
         </View>
       </ScrollView>

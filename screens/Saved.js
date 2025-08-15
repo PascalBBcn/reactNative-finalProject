@@ -11,9 +11,12 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
-import { useSavedRecipes } from "./SavedRecipesContext";
-import { myStyles } from "./styles";
-import { useSettings, getFontSizeIncrement } from "./SettingsContext.js";
+import { useSavedRecipes } from "../contexts/SavedRecipesContext";
+import { myStyles } from "../styles";
+import {
+  useSettings,
+  getFontSizeIncrement,
+} from "../contexts/SettingsContext.js";
 
 const screenHeight = Dimensions.get("window").height;
 

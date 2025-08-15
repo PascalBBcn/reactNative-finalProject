@@ -1,22 +1,19 @@
 import React, { useState } from "react";
-import { StatusBar } from "expo-status-bar";
 import {
   ScrollView,
   SafeAreaView,
   Text,
   View,
-  Image,
   Dimensions,
   TouchableOpacity,
   TextInput,
   Alert,
 } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
 
 const screenHeight = Dimensions.get("window").height;
 
-import firebase from "./firebase";
-import { myStyles } from "./styles";
+import firebase from "../firebase";
+import { myStyles } from "../styles";
 
 export function RegisterLoginScreen({ navigation }) {
   const styles = myStyles();

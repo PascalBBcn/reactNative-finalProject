@@ -12,9 +12,13 @@ import {
 
 import { useState, useEffect } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
+import { myStyles } from "../styles";
+import {
+  useSettings,
+  getFontSizeIncrement,
+} from "../contexts/SettingsContext.js";
+import { getHotRecipes, getDetailedInfo } from "../api.js";
 
-import { myStyles } from "./styles";
-import { useSettings, getFontSizeIncrement } from "./SettingsContext.js";
 const screenHeight = Dimensions.get("window").height;
 const apiKey = "90731595192b48b4806b672564913a73";
 const screenWidth = Dimensions.get("window").width;
@@ -26,54 +30,17 @@ export function Homescreen({ navigation }) {
   const [hotRecipes, setHotRecipes] = useState([]);
 
   useEffect(() => {
-    getHotRecipes();
-  }, []);
-
-  const getHotRecipes = async () => {
-    try {
-      const url = `https://api.spoonacular.com/recipes/complexSearch?&sort=popularity&number=1&apiKey=${apiKey}`;
-      const res = await fetch(url);
-      const recipes = await res.json();
-      setHotRecipes(recipes.results);
-      getDetailedInfo(recipes.results);
-    } catch (error) {
-      console.error("Error getting hot recipes", error);
-    }
-  };
-
-  const getDetailedInfo = (recipes) => {
-    const details = recipes.map((recipe) => {
-      const url = `https://api.spoonacular.com/recipes/${recipe.id}/information?apiKey=${apiKey}`;
-      return fetch(url)
-        .then((res) => res.json())
-        .then((info) => ({
-          ...recipe,
-          spoonacularScore: info.spoonacularScore.toFixed(0),
-          readyInMinutes: info.readyInMinutes,
-          servings: info.servings,
-          ingredients: info.extendedIngredients,
-          instructions: info.analyzedInstructions,
-        }))
-        .catch((error) => {
-          console.log(error);
-          return {
-            ...recipe,
-            spoonacularScore: null,
-            readyInMinutes: null,
-            servings: null,
-            ingredients: [],
-            instructions: "Error, instructions unavailable.",
-          };
-        });
-    });
-    Promise.all(details)
-      .then((fullRecipes) => {
+    const fetchRecipes = async () => {
+      try {
+        const recipes = await getHotRecipes(1);
+        const fullRecipes = await getDetailedInfo(recipes);
         setHotRecipes(fullRecipes);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+      } catch (e) {
+        console.error("Error fetching recipes", e);
+      }
+    };
+    fetchRecipes();
+  }, []);
 
   // Taken from the list of all "cuisine" searches available on Spoonacular
   const mealTypes = ["Breakfast", "Lunch", "Dinner"];

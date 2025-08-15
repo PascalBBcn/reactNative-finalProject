@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import firebase from "./firebase";
+import firebase from "../firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Alert } from "react-native";
 
 export const SavedRecipesContext = createContext();
 
@@ -100,31 +99,3 @@ export const SavedRecipesProvider = ({ children }) => {
 };
 
 export const useSavedRecipes = () => useContext(SavedRecipesContext);
-
-// // BEFORE USING FIREBASE, SAVING LOCALLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// import React, { createContext, useContext, useState } from "react";
-
-// export const SavedRecipesContext = createContext();
-
-// export const SavedRecipesProvider = ({ children }) => {
-//   const [savedRecipes, setSavedRecipes] = useState([]);
-
-//   const toggleSave = (recipe) => {
-//     setSavedRecipes((prev) => {
-//       const recipeAlreadyExists = prev.find(
-//         (item) => item.title === recipe.title
-//       );
-//       if (recipeAlreadyExists)
-//         return prev.filter((item) => item.title !== recipe.title);
-//       else return [...prev, recipe];
-//     });
-//   };
-
-//   return (
-//     <SavedRecipesContext.Provider value={{ savedRecipes, toggleSave }}>
-//       {children}
-//     </SavedRecipesContext.Provider>
-//   );
-// };
-
-// export const useSavedRecipes = () => useContext(SavedRecipesContext);

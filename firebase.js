@@ -1,20 +1,11 @@
-// Import the functions you need from the SDKs you need
-// // v9 syntax
-// import { initializeApp } from "firebase/app";
-
 // DEMO CREDENTIALS:
 // test@gmail.com
 // test123
 
-// v8 syntax:
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyA_EkbreYUR1P7GT04-BS6RT-cdFiuA3eM",
   authDomain: "mobiledev-finalproject-11413.firebaseapp.com",

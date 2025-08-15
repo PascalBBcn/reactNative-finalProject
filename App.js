@@ -7,18 +7,18 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
-import { SavedRecipesProvider } from "./SavedRecipesContext.js";
-import { ShoppingListsProvider } from "./ShoppingListsContext.js";
-import { SettingsProvider } from "./SettingsContext.js";
+import { SavedRecipesProvider } from "./contexts/SavedRecipesContext.js";
+import { ShoppingListsProvider } from "./contexts/ShoppingListsContext.js";
+import { SettingsProvider } from "./contexts/SettingsContext.js";
 
-import Settings from "./Settings.js";
-import { Homescreen } from "./Homescreen.js";
-import { Search } from "./Search.js";
-import { Saved } from "./Saved.js";
-import { ShoppingLists } from "./ShoppingLists.js";
-import { Recipe } from "./Recipe.js";
-import { ShoppingList } from "./ShoppingList";
-import { RegisterLoginScreen } from "./RegisterLoginScreen.js";
+import Settings from "./screens/Settings.js";
+import { Homescreen } from "./screens/Homescreen.js";
+import { Search } from "./screens/Search.js";
+import { Saved } from "./screens/Saved.js";
+import { ShoppingLists } from "./screens/ShoppingLists.js";
+import { Recipe } from "./screens/Recipe.js";
+import { ShoppingList } from "./screens/ShoppingList";
+import { RegisterLoginScreen } from "./screens/RegisterLoginScreen.js";
 
 const repeatedScreenOptions = ({ navigation }) => ({
   headerTitleAlign: "center",

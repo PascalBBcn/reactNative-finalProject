@@ -3,19 +3,15 @@ import {
   SafeAreaView,
   Text,
   View,
-  Image,
   TouchableOpacity,
-  TextInput,
-  Dimensions,
-  Alert,
 } from "react-native";
-import React, { useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"; //For the bottom navigation bar icons
-import { useShoppingLists } from "./ShoppingListsContext";
-import { myStyles } from "./styles";
-import { useSettings, getFontSizeIncrement } from "./SettingsContext.js";
-
-const screenHeight = Dimensions.get("window").height;
+import { useShoppingLists } from "../contexts/ShoppingListsContext";
+import { myStyles } from "../styles";
+import {
+  useSettings,
+  getFontSizeIncrement,
+} from "../contexts/SettingsContext.js";
 
 export function ShoppingList({ route }) {
   const { fontSize } = useSettings();
