@@ -20,6 +20,7 @@
     "firebase": "^8.10.1",
     "react": "19.0.0",
     "react-native": "0.79.4",
+    "react-native-dotenv": "^3.4.11",
     "react-native-render-html": "^6.3.4",
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",

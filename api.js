@@ -1,9 +1,10 @@
+import { SPOONACULAR_API_KEY } from "@env";
 // SPOONACULAR API KEY, FREE VERSION (MAX 150 QUERIES A DAY)
-const apiKey = "90731595192b48b4806b672564913a73";
+const apiKey = SPOONACULAR_API_KEY;
 
 // Used by Homescreen
-export const getHotRecipes = async (number = 1) => {
-  const url = `https://api.spoonacular.com/recipes/complexSearch?&sort=popularity&number=${number}&apiKey=${apiKey}`;
+export const getHotRecipes = async () => {
+  const url = `https://api.spoonacular.com/recipes/complexSearch?&sort=popularity&number=4&apiKey=${apiKey}`;
   const res = await fetch(url);
   const recipes = await res.json();
   return recipes.results;

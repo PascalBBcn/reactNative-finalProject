@@ -116,7 +116,7 @@ export function Search({ navigation, route }) {
     try {
       const { fullRecipes, totalResults } = await getDetailedInfoByQuery(
         query,
-        { number: 1, offset: newOffset, sort: sortValue, sortDirection }
+        { number: 3, offset: newOffset, sort: sortValue, sortDirection }
       );
       setTotalResults(totalResults);
       setRecipes((prev) => (append ? [...prev, ...fullRecipes] : fullRecipes));

@@ -1,13 +1,13 @@
 // DEMO CREDENTIALS:
 // test@gmail.com
 // test123
-
+import { FIREBASE_API_KEY } from "@env";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA_EkbreYUR1P7GT04-BS6RT-cdFiuA3eM",
+  apiKey: FIREBASE_API_KEY,
   authDomain: "mobiledev-finalproject-11413.firebaseapp.com",
   projectId: "mobiledev-finalproject-11413",
   storageBucket: "mobiledev-finalproject-11413.firebasestorage.app",
