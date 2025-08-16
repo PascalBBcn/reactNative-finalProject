@@ -20,7 +20,6 @@ import {
 import { getHotRecipes, getDetailedInfo } from "../api.js";
 
 const screenHeight = Dimensions.get("window").height;
-const apiKey = "90731595192b48b4806b672564913a73";
 const screenWidth = Dimensions.get("window").width;
 
 export function Homescreen({ navigation }) {
