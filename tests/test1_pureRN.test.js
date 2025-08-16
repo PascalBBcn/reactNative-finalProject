@@ -2,6 +2,8 @@ import React from "react";
 import { Text, View } from "react-native";
 import { render, screen } from "@testing-library/react-native";
 
+// Here we simply test that JEST is properly hooked up and running
+// for pure React Native components
 function BasicComponent() {
   return (
     <View>
