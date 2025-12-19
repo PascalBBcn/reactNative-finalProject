@@ -1,6 +1,11 @@
 # Mobile Dev Final Project - GetRecipes
 
-Final project built with React Native and Expo
+
+https://github.com/user-attachments/assets/8a5415a1-e83e-4a4e-92a7-35e1f27fda69
+
+
+GetRecipes - Recipe Finder, built with **React Native**, **Expo**, **Firebase**, and **Spoonacular API** (Free Tier)
+Users can search for recipes with a variety of filters, apply sorting, save recipes, create shopping lists, and merge shopping lists.
 
 ## Registered User Credentials
 
@@ -10,7 +15,6 @@ test123
 
 ## API Keys
 
-API KEYS are stored in firebase.js and api.js for convenience
 NOTE!!! Spoonacular FREE TIER has max API CALL LIMIT = 150 day
 (therefore I limited the number of search results shown at a time)
 
