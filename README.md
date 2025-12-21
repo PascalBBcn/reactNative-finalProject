@@ -1,11 +1,22 @@
-# Mobile Dev Final Project - GetRecipes
+<a id="readme-top"></a>
+
+<br />
+<div align="center">
+
+  <h2 align="center">GetRecipes - RecipeFinder - ReactNative</h2>
+
+  <p align="center">
+   GetRecipes - Recipe Finder. Users can search for recipes with a variety of filters, apply sorting, save recipes, create shopping lists, and merge shopping lists.
+    <br />
+  </p>
+  <a href="https://snack.expo.dev/@pascalbbcn/getrecipes-recipefinder?platform=android"><strong>LIVE DEMO</strong></a>
+</div>
 
 
 https://github.com/user-attachments/assets/8a5415a1-e83e-4a4e-92a7-35e1f27fda69
 
 
-GetRecipes - Recipe Finder, built with **React Native**, **Expo**, **Firebase**, and **Spoonacular API** (Free Tier)
-Users can search for recipes with a variety of filters, apply sorting, save recipes, create shopping lists, and merge shopping lists.
+Built with **React Native**, **Expo**, **Firebase**, and **Spoonacular API** (Free Tier)
 
 ## Registered User Credentials
 
